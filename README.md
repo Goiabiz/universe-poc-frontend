@@ -53,3 +53,14 @@ Se o Supabase não estiver configurado ou a política RLS bloquear leitura públ
 3. Criar ações dos botões internos.
 4. Criar detalhes das funcionalidades por módulo.
 5. Criar Configurações > Perfil e Aparência.
+
+
+## Versão v3 — listas reais no dashboard
+
+Esta versão mantém a integração Supabase da v2 e passa a usar dados reais também nas listas do Dashboard:
+
+- `vw_alertas_pendentes` para **Últimos alertas**
+- `vw_impactos_produto` para **Impactos recentes**
+- `vw_radar_dashboard` para os cards executivos
+
+A tela continua com fallback demonstrativo se alguma consulta falhar.
