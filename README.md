@@ -242,3 +242,54 @@ Roadmap registrado para próximos componentes:
 - filtros dinâmicos no topo por status, módulo, responsável, prioridade e período;
 - conectar esses componentes aos campos reais do Supabase;
 - criar rotas próprias para abrir detalhe em aba/página dedicada.
+
+
+## Versão v10 — Workspaces configuráveis por módulo
+
+Consolida o conceito de **área de trabalho configurável por módulo**.
+
+Inclui:
+- botão **Personalizar área** no topo;
+- modal de personalização por módulo;
+- configuração visual de colunas, filtros rápidos, painel lateral e cards/KPIs;
+- modelo padrão específico para cada módulo;
+- registro de roadmap para salvar preferências por usuário/perfil no Supabase.
+
+Conceito:
+- Módulo = área de trabalho;
+- Funcionalidade = visão/aba/bloco dentro da área;
+- Usuário = personaliza layout, colunas, filtros e painel conforme seu uso.
+
+
+## Correção v10.1 — Personalização movida para Configurações
+
+Remove a personalização do topo global e concentra a configuração da área de trabalho dentro de **Configurações > Aparência/Área de trabalho**.
+
+Inclui:
+- preferências salvas em `localStorage`;
+- nome, e-mail e foto do usuário;
+- tema claro/escuro/sistema;
+- cor principal e cor da dashboard;
+- densidade confortável/compacta;
+- painel lateral aberto ou recolhido por padrão;
+- flags para KPIs, gráficos e filtros rápidos;
+- preparação para gravar preferências por usuário/perfil no Supabase.
+
+Esse bloco substitui o botão global **Personalizar área** e evita reconfiguração a cada abertura do navegador.
+
+
+## Versão v11 — Bloco operacional completo do front
+
+Consolida os 7 apontamentos do primeiro bloco do front:
+
+1. Validação visual da base v10.1 preservada.
+2. Ícone de detalhe padronizado nas listas principais.
+3. Painel lateral direito mantido como prévia rápida, com recolhimento.
+4. Modal de detalhe com abas funcionais: Resumo, Histórico, Vínculos, Ações e Anexos.
+5. Filtros dinâmicos visuais e funcionais por texto, status, prioridade, responsável e módulo.
+6. Edição inline simulada na linha: editar texto, status, prioridade e responsável.
+7. Preferências persistentes no navegador, com roadmap para Supabase.
+
+Observação:
+- Edição inline e filtros funcionam em modo front/local para POC.
+- Persistência real de edição, preferências por perfil e rotas dedicadas serão conectadas ao Supabase na próxima fase.

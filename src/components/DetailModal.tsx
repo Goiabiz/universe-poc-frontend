@@ -1,7 +1,20 @@
-import { X, Maximize2, ExternalLink, Clock3, Link2, MessageSquareText, ShieldCheck } from 'lucide-react';
+import { useState } from 'react';
+import { X, Maximize2, Clock3, Link2, MessageSquareText, ShieldCheck, Paperclip, GitBranch, CheckCircle2 } from 'lucide-react';
 import type { PanelDetail } from './RightPanel';
 
+type TabKey = 'resumo' | 'historico' | 'vinculos' | 'acoes' | 'anexos';
+
+const tabs: Array<{ key: TabKey; label: string }> = [
+  { key: 'resumo', label: 'Resumo' },
+  { key: 'historico', label: 'Histórico' },
+  { key: 'vinculos', label: 'Vínculos' },
+  { key: 'acoes', label: 'Ações' },
+  { key: 'anexos', label: 'Anexos' }
+];
+
 export function DetailModal({ detail, onClose }: { detail: PanelDetail | null; onClose: () => void }) {
+  const [activeTab, setActiveTab] = useState<TabKey>('resumo');
+
   if (!detail) return null;
 
   return (
@@ -23,40 +36,89 @@ export function DetailModal({ detail, onClose }: { detail: PanelDetail | null; o
         </header>
 
         <nav className="detail-tabs">
-          <button className="active">Resumo</button>
-          <button>Histórico</button>
-          <button>Vínculos</button>
-          <button>Ações</button>
-          <button>Anexos</button>
+          {tabs.map((tab) => (
+            <button key={tab.key} className={activeTab === tab.key ? 'active' : ''} onClick={() => setActiveTab(tab.key)}>
+              {tab.label}
+            </button>
+          ))}
         </nav>
 
         <div className="detail-modal-body">
           <main className="detail-main">
-            <section className="detail-section">
-              <div className="section-title-row">
-                <h3>Resumo do item</h3>
-                <span className="badge badge-green">{detail.badge ?? 'Selecionado'}</span>
-              </div>
-              <p className="muted">{detail.description ?? 'Item selecionado para análise detalhada.'}</p>
-
-              <div className="detail-info-grid">
-                {(detail.meta ?? []).map((item) => (
-                  <div key={item.label} className="detail-info-card">
-                    <span>{item.label}</span>
-                    <strong>{item.value ?? '-'}</strong>
+            {activeTab === 'resumo' && (
+              <>
+                <section className="detail-section">
+                  <div className="section-title-row">
+                    <h3>Resumo do item</h3>
+                    <span className="badge badge-green">{detail.badge ?? 'Selecionado'}</span>
                   </div>
-                ))}
-              </div>
-            </section>
+                  <p className="muted">{detail.description ?? 'Item selecionado para análise detalhada.'}</p>
 
-            <section className="detail-section">
-              <h3>Linha do tempo</h3>
-              <div className="timeline">
-                <div><Clock3 size={16} /><span>Item selecionado para análise</span><small>agora</small></div>
-                <div><ShieldCheck size={16} /><span>Validação automática disponível</span><small>próxima etapa</small></div>
-                <div><MessageSquareText size={16} /><span>Comentário ou decisão do usuário</span><small>pendente</small></div>
-              </div>
-            </section>
+                  <div className="detail-info-grid">
+                    {(detail.meta ?? []).map((item) => (
+                      <div key={item.label} className="detail-info-card">
+                        <span>{item.label}</span>
+                        <strong>{item.value ?? '-'}</strong>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                <section className="detail-section">
+                  <h3>Linha do tempo</h3>
+                  <div className="timeline">
+                    <div><Clock3 size={16} /><span>Item selecionado para análise</span><small>agora</small></div>
+                    <div><ShieldCheck size={16} /><span>Validação automática disponível</span><small>próxima etapa</small></div>
+                    <div><MessageSquareText size={16} /><span>Comentário ou decisão do usuário</span><small>pendente</small></div>
+                  </div>
+                </section>
+              </>
+            )}
+
+            {activeTab === 'historico' && (
+              <section className="detail-section">
+                <h3>Histórico operacional</h3>
+                <div className="timeline">
+                  <div><Clock3 size={16} /><span>Registro criado a partir da base monitorada</span><small>origem</small></div>
+                  <div><MessageSquareText size={16} /><span>Item disponibilizado para revisão do PO</span><small>triagem</small></div>
+                  <div><ShieldCheck size={16} /><span>Aguardando decisão, validação ou encaminhamento</span><small>atual</small></div>
+                </div>
+              </section>
+            )}
+
+            {activeTab === 'vinculos' && (
+              <section className="detail-section">
+                <h3>Vínculos do item</h3>
+                <div className="linked-grid">
+                  <div><GitBranch size={18} /><strong>Documento de origem</strong><span>Fonte normativa, atendimento ou integração.</span></div>
+                  <div><GitBranch size={18} /><strong>Impacto relacionado</strong><span>Módulo, funcionalidade, cliente ou regra afetada.</span></div>
+                  <div><GitBranch size={18} /><strong>Ação vinculada</strong><span>Encaminhamento operacional ou decisão pendente.</span></div>
+                </div>
+              </section>
+            )}
+
+            {activeTab === 'acoes' && (
+              <section className="detail-section">
+                <h3>Ações e próximos passos</h3>
+                <div className="action-list">
+                  <button className="primary">{detail.actions?.[0] ?? 'Gerar ação'}</button>
+                  <button>{detail.actions?.[1] ?? 'Ver documento'}</button>
+                  <button>Adicionar comentário</button>
+                  <button>Enviar para validação</button>
+                </div>
+              </section>
+            )}
+
+            {activeTab === 'anexos' && (
+              <section className="detail-section">
+                <h3>Anexos</h3>
+                <div className="empty-attachment">
+                  <Paperclip size={22} />
+                  <strong>Nenhum anexo vinculado nesta POC.</strong>
+                  <span>Área preparada para documentos, evidências, prints e arquivos de apoio.</span>
+                </div>
+              </section>
+            )}
           </main>
 
           <aside className="detail-side">
@@ -68,10 +130,10 @@ export function DetailModal({ detail, onClose }: { detail: PanelDetail | null; o
             </section>
 
             <section className="detail-section">
-              <h3>Vínculos</h3>
+              <h3>Status do trabalho</h3>
+              <div className="mini-row"><CheckCircle2 size={16} /> Revisão operacional</div>
               <div className="mini-row"><Link2 size={16} /> Documento de origem</div>
               <div className="mini-row"><Link2 size={16} /> Impacto relacionado</div>
-              <div className="mini-row"><Link2 size={16} /> Ação vinculada</div>
             </section>
           </aside>
         </div>

@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
 import { Bell, BookOpen, Boxes, ChartNoAxesCombined, ChevronLeft, CircleHelp, ClipboardList, Cog, Headphones, Home, Menu, Search, ShieldAlert, UserRound } from 'lucide-react';
 import type { PageKey } from '../App';
+import { loadWorkspacePreferences } from '../lib/preferences';
 
 const navItems: Array<{ key: PageKey; label: string; icon: React.ReactNode }> = [
   { key: 'dashboard', label: 'Dashboard', icon: <Home size={21} /> },
@@ -12,6 +14,13 @@ const navItems: Array<{ key: PageKey; label: string; icon: React.ReactNode }> = 
 ];
 
 export function Layout({ activePage, onNavigate, children, rightPanel }: { activePage: PageKey; onNavigate: (page: PageKey) => void; children: React.ReactNode; rightPanel?: React.ReactNode }) {
+  const [prefs, setPrefs] = useState(() => loadWorkspacePreferences());
+
+  useEffect(() => {
+    const refresh = () => setPrefs(loadWorkspacePreferences());
+    window.addEventListener('storage', refresh);
+    return () => window.removeEventListener('storage', refresh);
+  }, []);
   return (
     <div className="app-shell">
       <aside className="sidebar">
@@ -36,7 +45,7 @@ export function Layout({ activePage, onNavigate, children, rightPanel }: { activ
             <button className="environment"><span /> Ambiente: <strong>Produção</strong></button>
             <button className="icon-btn"><Bell size={19} /><em>12</em></button>
             <button className="icon-btn"><CircleHelp size={19} /></button>
-            <div className="user-area"><div className="avatar"><UserRound size={18} /></div><div><strong>Bruno Oliveira</strong><small>Administrador</small></div></div>
+            <div className="user-area"><div className="avatar">{prefs.userPhotoUrl ? <img src={prefs.userPhotoUrl} alt={prefs.userName} /> : <UserRound size={18} />}</div><div><strong>{prefs.userName}</strong><small>{prefs.userEmail || 'Administrador'}</small></div></div>
           </div>
         </header>
         <div className="content-grid">

@@ -1,145 +1,115 @@
-import { Maximize2 } from 'lucide-react';
+import { useState } from 'react';
 import { PageHeader } from '../components/PageHeader';
 import { KpiCard } from '../components/KpiCard';
 import { Badge } from '../components/Badge';
 import { DataSourceNotice } from '../components/DataSourceNotice';
+import { InlineRowActions } from '../components/InlineRowActions';
+import { SmartFilters, normalizeFilterText } from '../components/SmartFilters';
 import { atendimentos as mockAtendimentos } from '../data/mock';
 import { useAsyncData } from '../hooks/useAsyncData';
 import { fetchAtendimentos } from '../services/radarApi';
 import type { PageProps } from '../App';
 
+type Atendimento = {
+  canal: string;
+  cliente: string;
+  assunto: string;
+  prioridade: string;
+  responsavel: string;
+  ultima?: string;
+  ultimaInteracao?: string;
+  status: string;
+  protocolo?: string;
+  ticket?: string;
+};
+
 const isOpen = (status: string) => {
   const normalized = status.toLowerCase();
-  return (
-    normalized.includes('aberto') ||
-    normalized.includes('andamento') ||
-    normalized.includes('em atendimento') ||
-    normalized.includes('pendente') ||
-    normalized.includes('novo')
-  );
+  return normalized.includes('aberto') || normalized.includes('andamento') || normalized.includes('atendimento') || normalized.includes('pendente') || normalized.includes('novo');
 };
 
 const isRisk = (prioridade: string, status: string) => {
-  const normalizedPriority = prioridade.toLowerCase();
-  const normalizedStatus = status.toLowerCase();
-
-  return (
-    normalizedPriority.includes('alta') ||
-    normalizedPriority.includes('crítica') ||
-    normalizedPriority.includes('critica') ||
-    normalizedStatus.includes('risco') ||
-    normalizedStatus.includes('atras')
-  );
+  const p = prioridade.toLowerCase();
+  const s = status.toLowerCase();
+  return p.includes('alta') || p.includes('crít') || s.includes('pendente');
 };
 
-const formatDate = (value?: string) => {
-  if (!value) return '-';
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) return value;
-  return parsed.toLocaleString('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-};
+const formatDate = (value?: string) => value || '-';
 
 export function CentralAtendimento({ onSelectDetail, onOpenDetail }: PageProps) {
-  const { data, source, loading, error } = useAsyncData(fetchAtendimentos, mockAtendimentos);
+  const [search, setSearch] = useState('');
+  const [status, setStatus] = useState('');
+  const [prioridade, setPrioridade] = useState('');
+  const [responsavel, setResponsavel] = useState('');
+  const result = useAsyncData(fetchAtendimentos, mockAtendimentos as Atendimento[]);
+  const data = result.data as Atendimento[];
 
-  const total = data.length;
-  const abertos = data.filter((item) => isOpen(item.status)).length || total;
-  const ticketsExternos = data.filter((item) => Boolean(item.ticket)).length;
-  const slaRisco = data.filter((item) => isRisk(item.prioridade, item.status)).length;
-  const integracoes = new Set(data.map((item) => item.canal).filter(Boolean)).size;
+  const filtered = data.filter((item) => {
+    const text = normalizeFilterText([item.canal, item.cliente, item.assunto, item.prioridade, item.responsavel, item.status].join(' '));
+    return (!search || text.includes(normalizeFilterText(search))) &&
+      (!status || text.includes(normalizeFilterText(status))) &&
+      (!prioridade || text.includes(normalizeFilterText(prioridade))) &&
+      (!responsavel || text.includes(normalizeFilterText(responsavel)));
+  });
 
-  const selected = data[0];
+  const abertos = filtered.filter((item) => isOpen(item.status)).length;
+  const risco = filtered.filter((item) => isRisk(item.prioridade, item.status)).length;
+  const canais = new Set(filtered.map((item) => item.canal).filter(Boolean)).size;
 
   return (
     <>
-      <PageHeader
-        title="Central de Atendimento"
-        subtitle="Atendimentos, tickets e integrações em acompanhamento"
-        action={<button className="secondary-btn">Novo atendimento</button>}
-      />
-
-      <div className="tabs">
-        <button className="active">Atendimentos</button>
-        <button>Tickets</button>
-        <button>Integrações</button>
-      </div>
-
-      <DataSourceNotice source={source} loading={loading} error={error} />
+      <PageHeader title="Central de Atendimento" subtitle="Atendimentos, tickets e integrações em acompanhamento" action={<button className="secondary-btn">Novo atendimento</button>} />
+      <div className="tabs"><button className="active">Atendimentos</button><button>Tickets</button><button>Integrações</button></div>
+      <DataSourceNotice source={result.source} loading={result.loading} error={result.error} />
 
       <div className="kpi-grid four">
-        <KpiCard label="Atendimentos abertos" value={String(abertos)} trend={source === 'supabase' ? 'fila atual' : '+4 vs ontem'} tone="green" />
-        <KpiCard label="Tickets externos" value={String(ticketsExternos)} trend="vinculados" tone="blue" />
-        <KpiCard label="SLA em risco" value={String(slaRisco)} trend={slaRisco > 0 ? 'atenção necessária' : 'sem risco crítico'} tone="red" />
-        <KpiCard label="Canais ativos" value={String(integracoes)} trend="integrações na base" tone="orange" />
+        <KpiCard label="Atendimentos abertos" value={abertos} trend="+4" tone="green" />
+        <KpiCard label="Tickets externos" value={0} trend="vinculados" tone="blue" />
+        <KpiCard label="SLA em risco" value={risco} trend="atenção necessária" tone="red" />
+        <KpiCard label="Canais ativos" value={canais || '-'} trend="integrações na base" tone="orange" />
       </div>
 
-      <div className="toolbar">
-        <button>Canal</button>
-        <button>Prioridade</button>
-        <button>Responsável</button>
-        <input placeholder="Buscar atendimento, cliente, protocolo ou assunto..." />
-        <button>Filtros</button>
-      </div>
+      <SmartFilters search={search} onSearch={setSearch} status={status} onStatus={setStatus} prioridade={prioridade} onPrioridade={setPrioridade} responsavel={responsavel} onResponsavel={setResponsavel} placeholder="Buscar atendimento, cliente, protocolo ou assunto..." />
 
       <div className="card">
-        <div className="section-title-row">
-          <h3>Atendimentos em acompanhamento</h3>
-          <span className="small-muted">{data.length} registros</span>
-        </div>
-
+        <div className="section-title-row"><h3>Atendimentos em acompanhamento</h3><span className="small-muted">{filtered.length} registros</span></div>
         <table>
-          <thead>
-            <tr>
-              <th>Canal</th>
-              <th>Cliente</th>
-              <th>Assunto</th>
-              <th>Prioridade</th>
-              <th>Responsável</th>
-              <th>Última interação</th>
-              <th>Status</th>
-            </tr>
-          </thead>
+          <thead><tr><th>Canal</th><th>Cliente</th><th>Assunto</th><th>Prioridade</th><th>Responsável</th><th>Última interação</th><th>Status</th><th>Ações</th></tr></thead>
           <tbody>
-            {data.map((atendimento) => (
-              <tr className="clickable-row" key={`${atendimento.protocolo}-${atendimento.assunto}-${atendimento.cliente}`} onClick={() => onSelectDetail?.({ title: atendimento.assunto || 'Atendimento selecionado', subtitle: atendimento.cliente, badge: atendimento.prioridade, badgeTone: atendimento.prioridade, description: 'Atendimento selecionado para acompanhamento operacional e vínculo com ticket.', meta: [{ label: 'Canal', value: atendimento.canal }, { label: 'Cliente', value: atendimento.cliente }, { label: 'Responsável', value: atendimento.responsavel }, { label: 'Última interação', value: formatDate(atendimento.ultimaInteracao) }, { label: 'Status', value: atendimento.status }, { label: 'Ticket', value: atendimento.ticket || '-' }], actions: ['Responder', 'Abrir ticket', 'Vincular alerta'] })}>
-                <td><Badge tone="blue">{atendimento.canal || '-'}</Badge></td>
-                <td>{atendimento.cliente || '-'}</td>
-                <td>
-                  <strong>{atendimento.assunto || '-'}</strong>
-                  <div className="table-subtitle">{atendimento.protocolo || 'sem protocolo'}</div>
-                </td>
-                <td><Badge tone={isRisk(atendimento.prioridade, atendimento.status) ? 'red' : 'orange'}>{atendimento.prioridade || '-'}</Badge></td>
-                <td>{atendimento.responsavel || '-'}</td>
-                <td>{formatDate(atendimento.ultimaInteracao)}</td>
-                <td><Badge tone="blue">{atendimento.status || 'Sem status'}</Badge></td>
-              </tr>
-            ))}
+            {filtered.map((atendimento) => {
+              const detail = {
+                title: atendimento.assunto || 'Atendimento selecionado',
+                subtitle: atendimento.cliente,
+                badge: atendimento.prioridade,
+                badgeTone: atendimento.prioridade,
+                description: 'Atendimento selecionado para acompanhamento operacional e vínculo com ticket.',
+                meta: [
+                  { label: 'Canal', value: atendimento.canal },
+                  { label: 'Cliente', value: atendimento.cliente },
+                  { label: 'Responsável', value: atendimento.responsavel },
+                  { label: 'Última interação', value: formatDate(atendimento.ultimaInteracao ?? atendimento.ultima) },
+                  { label: 'Status', value: atendimento.status },
+                  { label: 'Ticket', value: atendimento.ticket || '-' }
+                ],
+                actions: ['Responder', 'Abrir ticket', 'Vincular alerta']
+              };
+              return (
+                <tr className="clickable-row" key={`${atendimento.protocolo ?? atendimento.cliente}-${atendimento.assunto}`} onClick={() => onSelectDetail?.(detail)}>
+                  <td><Badge tone="blue">{atendimento.canal}</Badge></td>
+                  <td>{atendimento.cliente}</td>
+                  <td><strong>{atendimento.assunto}</strong><div className="table-subtitle">{atendimento.protocolo ?? 'sem protocolo'}</div></td>
+                  <td><Badge tone={atendimento.prioridade.toLowerCase()}>{atendimento.prioridade}</Badge></td>
+                  <td>{atendimento.responsavel}</td>
+                  <td>{formatDate(atendimento.ultimaInteracao ?? atendimento.ultima)}</td>
+                  <td><Badge tone="blue">{atendimento.status}</Badge></td>
+                  <td><InlineRowActions detail={detail} status={atendimento.status} prioridade={atendimento.prioridade} responsavel={atendimento.responsavel} onOpenDetail={onOpenDetail} /></td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
-
-        {data.length === 0 && <p className="empty-note">Nenhum atendimento encontrado na base.</p>}
+        {filtered.length === 0 && <p className="empty-note">Nenhum atendimento encontrado para os filtros aplicados.</p>}
       </div>
-
-      {selected && (
-        <div className="card atendimento-preview">
-          <div>
-            <h3>Prévia do atendimento selecionado</h3>
-            <p className="muted">Esta área prepara o desenho para timeline, mensagens, ticket externo e ações rápidas.</p>
-          </div>
-          <div className="detail-grid">
-            <span>Cliente</span><strong>{selected.cliente || '-'}</strong>
-            <span>Assunto</span><strong>{selected.assunto || '-'}</strong>
-            <span>Canal</span><strong>{selected.canal || '-'}</strong>
-            <span>Ticket</span><strong>{selected.ticket || '-'}</strong>
-          </div>
-        </div>
-      )}
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Layout } from './components/Layout';
 import { RightPanel, type PanelDetail } from './components/RightPanel';
 import { DetailModal } from './components/DetailModal';
@@ -9,6 +9,7 @@ import { BaseConhecimento } from './pages/BaseConhecimento';
 import { CentralAtendimento } from './pages/CentralAtendimento';
 import { ImpactosProduto } from './pages/ImpactosProduto';
 import { Configuracoes } from './pages/Configuracoes';
+import { applyWorkspacePreferences, loadWorkspacePreferences } from './lib/preferences';
 
 export type PageKey = 'dashboard' | 'alertas' | 'analise' | 'base' | 'atendimento' | 'impactos' | 'config';
 
@@ -31,7 +32,11 @@ export function App() {
   const [activePage, setActivePage] = useState<PageKey>('dashboard');
   const [selectedDetail, setSelectedDetail] = useState<PanelDetail | null>(null);
   const [expandedDetail, setExpandedDetail] = useState<PanelDetail | null>(null);
-  const [isRightPanelVisible, setIsRightPanelVisible] = useState(true);
+  const [isRightPanelVisible, setIsRightPanelVisible] = useState(() => loadWorkspacePreferences().rightPanelDefault === 'open');
+
+  useEffect(() => {
+    applyWorkspacePreferences(loadWorkspacePreferences());
+  }, []);
 
   const handleNavigate = (page: PageKey) => {
     setActivePage(page);
