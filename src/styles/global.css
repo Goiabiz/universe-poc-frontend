@@ -129,3 +129,28 @@ tr:hover td { background: #f7fbf9; }
   color: var(--muted);
   font-size: 14px;
 }
+
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 8px 16px;
+  margin-top: 16px;
+  color: var(--text);
+}
+
+.detail-grid span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.mobile-detail-card {
+  display: none;
+}
+
+@media (max-width: 1180px) {
+  .mobile-detail-card {
+    display: block;
+    margin-top: 18px;
+  }
+}

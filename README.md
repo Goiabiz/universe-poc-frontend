@@ -64,3 +64,12 @@ Esta versão mantém a integração Supabase da v2 e passa a usar dados reais ta
 - `vw_radar_dashboard` para os cards executivos
 
 A tela continua com fallback demonstrativo se alguma consulta falhar.
+
+
+## Versão v4 — Impactos no Produto conectado
+
+A tela **Impactos no Produto** passa a usar dados reais da view:
+
+- `vw_impactos_produto`
+
+A tela calcula indicadores a partir dos registros carregados e mantém fallback demonstrativo caso a consulta falhe.
