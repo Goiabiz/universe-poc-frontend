@@ -1,3 +1,4 @@
+import { Maximize2 } from 'lucide-react';
 import { PageHeader } from '../components/PageHeader';
 import { KpiCard } from '../components/KpiCard';
 import { Badge } from '../components/Badge';
@@ -5,6 +6,7 @@ import { DataSourceNotice } from '../components/DataSourceNotice';
 import { alertas, impactos, kpis } from '../data/mock';
 import { useAsyncData } from '../hooks/useAsyncData';
 import { fetchAlertas, fetchDashboard, fetchImpactos } from '../services/radarApi';
+import type { PageProps } from '../App';
 
 const hasCriticalTone = (value: string) => {
   const normalized = value.toLowerCase();
@@ -15,7 +17,7 @@ const getCombinedSource = (sources: string[]) => {
   return sources.every((source) => source === 'supabase') ? 'supabase' : 'mock';
 };
 
-export function Dashboard() {
+export function Dashboard({ onSelectDetail, onOpenDetail }: PageProps) {
   const dashboard = useAsyncData(fetchDashboard, kpis);
   const alertasData = useAsyncData(fetchAlertas, alertas);
   const impactosData = useAsyncData(fetchImpactos, impactos);

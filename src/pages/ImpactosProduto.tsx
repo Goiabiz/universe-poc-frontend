@@ -1,3 +1,4 @@
+import { Maximize2 } from 'lucide-react';
 import { PageHeader } from '../components/PageHeader';
 import { KpiCard } from '../components/KpiCard';
 import { Badge } from '../components/Badge';
@@ -5,6 +6,7 @@ import { DataSourceNotice } from '../components/DataSourceNotice';
 import { impactos as mockImpactos } from '../data/mock';
 import { useAsyncData } from '../hooks/useAsyncData';
 import { fetchImpactos } from '../services/radarApi';
+import type { PageProps } from '../App';
 
 const isCritical = (value: string) => {
   const normalized = value.toLowerCase();
@@ -18,7 +20,7 @@ const isHigh = (value: string) => {
 
 const activeStatuses = ['em andamento', 'em análise', 'monitoramento', 'monitorando', 'pendente'];
 
-export function ImpactosProduto() {
+export function ImpactosProduto({ onSelectDetail, onOpenDetail }: PageProps) {
   const { data, source, loading, error } = useAsyncData(fetchImpactos, mockImpactos);
 
   const total = data.length;
@@ -68,7 +70,7 @@ export function ImpactosProduto() {
           </thead>
           <tbody>
             {data.map((item) => (
-              <tr key={`${item.modulo}-${item.funcionalidade}-${item.origem}-${item.status}`}>
+              <tr className="clickable-row" key={`${item.modulo}-${item.funcionalidade}-${item.origem}-${item.status}`} onClick={() => onSelectDetail?.({ title: item.funcionalidade || 'Impacto selecionado', subtitle: item.modulo, badge: item.criticidade, badgeTone: item.criticidade, description: 'Impacto selecionado para análise de produto, cliente e ação necessária.', meta: [{ label: 'Módulo', value: item.modulo }, { label: 'Funcionalidade', value: item.funcionalidade }, { label: 'Origem', value: item.origem }, { label: 'Cliente', value: item.cliente }, { label: 'Status', value: item.status }], actions: ['Gerar ação', 'Ver documento', 'Marcar revisão'] })}>
                 <td>{item.modulo || '-'}</td>
                 <td>{item.funcionalidade || '-'}</td>
                 <td>{item.origem || '-'}</td>

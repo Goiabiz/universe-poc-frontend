@@ -182,3 +182,63 @@ Corrige as funções de Configurações para retornarem o mesmo formato usado pe
 - `{ data, source, error }`
 
 Com isso, a tela Configurações passa a exibir corretamente **Dados conectados ao Supabase** quando as views responderem.
+
+
+## Versão v9 — Detalhe expandido em modal
+
+Evolui o painel lateral dinâmico para permitir abrir o item selecionado em uma visão expandida.
+
+Inclui:
+- botão **Abrir detalhe** no painel lateral;
+- modal grande no estilo ferramenta de gestão/Jira;
+- abas de Resumo, Histórico, Vínculos, Ações e Anexos;
+- área de informações principais;
+- linha do tempo;
+- ações rápidas;
+- botão visual **Abrir em aba** preparado para evolução futura.
+
+Nesta versão, o modal é visual e contextual. As abas e ações ainda não executam fluxo real.
+
+
+## Correção v9.1 — Ajuste de import em Configurações
+
+Corrige erro de parse em `src/pages/Configuracoes.tsx`, onde o import de `PageProps` havia sido inserido dentro de um import já aberto.
+
+Correção:
+- reposiciona `import type { PageProps } from '../App';`
+- preserva modal de detalhe expandido
+- preserva painel lateral dinâmico
+
+
+## Correção v9.2 — Refinamento visual do detalhe expandido
+
+Ajusta o detalhe expandido para ficar mais próximo do padrão visual do Radar SUS e da experiência inspirada no Jira.
+
+Inclui:
+- remoção do botão textual **Abrir detalhe**;
+- inclusão de ícone de expandir no painel lateral;
+- título do painel clicável para abrir o detalhe;
+- modal com paleta visual do sistema;
+- botões superiores em formato de ícone;
+- cards e abas mais compactos e elegantes.
+
+
+## Correção v9.3 — Padrão Jira e roadmap de componentes
+
+Refina a experiência de detalhe para aproximar do padrão Jira:
+
+- modal volta a abrir centralizada;
+- remove redundância do botão textual de detalhe;
+- adiciona ícone de expandir na linha para abrir detalhe direto;
+- mantém clique no título/linha para atualizar painel direito;
+- adiciona possibilidade de recolher o painel lateral direito;
+- mantém painel lateral como prévia rápida.
+
+Roadmap registrado para próximos componentes:
+- editar título/resumo inline com ícone de lápis;
+- alterar status diretamente na linha;
+- alterar prioridade diretamente na linha;
+- alterar responsável diretamente na linha;
+- filtros dinâmicos no topo por status, módulo, responsável, prioridade e período;
+- conectar esses componentes aos campos reais do Supabase;
+- criar rotas próprias para abrir detalhe em aba/página dedicada.

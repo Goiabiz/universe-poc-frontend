@@ -1,3 +1,4 @@
+import { Maximize2 } from 'lucide-react';
 import { PageHeader } from '../components/PageHeader';
 import { KpiCard } from '../components/KpiCard';
 import { Badge } from '../components/Badge';
@@ -5,6 +6,7 @@ import { DataSourceNotice } from '../components/DataSourceNotice';
 import { atendimentos as mockAtendimentos } from '../data/mock';
 import { useAsyncData } from '../hooks/useAsyncData';
 import { fetchAtendimentos } from '../services/radarApi';
+import type { PageProps } from '../App';
 
 const isOpen = (status: string) => {
   const normalized = status.toLowerCase();
@@ -43,7 +45,7 @@ const formatDate = (value?: string) => {
   });
 };
 
-export function CentralAtendimento() {
+export function CentralAtendimento({ onSelectDetail, onOpenDetail }: PageProps) {
   const { data, source, loading, error } = useAsyncData(fetchAtendimentos, mockAtendimentos);
 
   const total = data.length;
@@ -105,7 +107,7 @@ export function CentralAtendimento() {
           </thead>
           <tbody>
             {data.map((atendimento) => (
-              <tr key={`${atendimento.protocolo}-${atendimento.assunto}-${atendimento.cliente}`}>
+              <tr className="clickable-row" key={`${atendimento.protocolo}-${atendimento.assunto}-${atendimento.cliente}`} onClick={() => onSelectDetail?.({ title: atendimento.assunto || 'Atendimento selecionado', subtitle: atendimento.cliente, badge: atendimento.prioridade, badgeTone: atendimento.prioridade, description: 'Atendimento selecionado para acompanhamento operacional e vínculo com ticket.', meta: [{ label: 'Canal', value: atendimento.canal }, { label: 'Cliente', value: atendimento.cliente }, { label: 'Responsável', value: atendimento.responsavel }, { label: 'Última interação', value: formatDate(atendimento.ultimaInteracao) }, { label: 'Status', value: atendimento.status }, { label: 'Ticket', value: atendimento.ticket || '-' }], actions: ['Responder', 'Abrir ticket', 'Vincular alerta'] })}>
                 <td><Badge tone="blue">{atendimento.canal || '-'}</Badge></td>
                 <td>{atendimento.cliente || '-'}</td>
                 <td>

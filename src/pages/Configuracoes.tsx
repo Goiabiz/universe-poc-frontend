@@ -1,3 +1,4 @@
+import { Maximize2 } from 'lucide-react';
 import { PageHeader } from '../components/PageHeader';
 import { KpiCard } from '../components/KpiCard';
 import { Badge } from '../components/Badge';
@@ -11,6 +12,7 @@ import {
   type IntegracaoConfig,
   type UsuarioConfig,
 } from '../services/radarApi';
+import type { PageProps } from '../App';
 
 const mockClientes: ClienteConfig[] = [
   {
@@ -63,7 +65,7 @@ const getSource = (sources: string[]) => {
   return sources.every((source) => source === 'supabase') ? 'supabase' : 'mock';
 };
 
-export function Configuracoes() {
+export function Configuracoes({ onSelectDetail, onOpenDetail }: PageProps) {
   const clientesResult = useAsyncData(fetchClientesConfig, mockClientes);
   const integracoesResult = useAsyncData(fetchIntegracoesConfig, mockIntegracoes);
   const usuariosResult = useAsyncData(fetchUsuariosConfig, mockUsuarios);
@@ -127,12 +129,12 @@ export function Configuracoes() {
                 <th>Tipo</th>
                 <th>Plano</th>
                 <th>Ambiente</th>
-                <th>Status</th>
+                <th>Status</th><th>Ações</th><th>Ações</th><th>Ações</th>
               </tr>
             </thead>
             <tbody>
               {clientes.map((cliente) => (
-                <tr key={`${cliente.nome}-${cliente.tipo}-${cliente.status}`}>
+                <tr className="clickable-row" key={`${cliente.nome}-${cliente.tipo}-${cliente.status}`} onClick={() => onSelectDetail?.({ title: cliente.nome, subtitle: cliente.tipo, badge: cliente.status, badgeTone: cliente.status, description: 'Cliente selecionado para configuração operacional.', meta: [{ label: 'Tipo', value: cliente.tipo }, { label: 'Plano', value: cliente.plano }, { label: 'Ambiente', value: cliente.ambiente }, { label: 'Integrações', value: cliente.integracoes }], actions: ['Editar cliente', 'Configurar integrações', 'Desativar'] })}>
                   <td>
                     <strong>{cliente.nome}</strong>
                     <div className="table-subtitle">Integrações: {cliente.integracoes}</div>
@@ -141,6 +143,20 @@ export function Configuracoes() {
                   <td>{cliente.plano}</td>
                   <td>{cliente.ambiente}</td>
                   <td><Badge tone={cliente.status.toLowerCase().includes('ativo') ? 'green' : 'orange'}>{cliente.status}</Badge></td>
+                      <td className="row-expand-cell"><button title="Abrir detalhe" onClick={(event) => { event.stopPropagation(); onOpenDetail?.({
+                        title: cliente.nome,
+                        subtitle: cliente.tipo,
+                        badge: cliente.status,
+                        badgeTone: cliente.status,
+                        description: 'Cliente selecionado para configuração operacional.',
+                        meta: [
+                          { label: 'Tipo', value: cliente.tipo },
+                          { label: 'Plano', value: cliente.plano },
+                          { label: 'Ambiente', value: cliente.ambiente },
+                          { label: 'Integrações', value: cliente.integracoes }
+                        ],
+                        actions: ['Editar cliente', 'Configurar integrações', 'Desativar']
+                      }); }}><Maximize2 size={15} /></button></td>
                 </tr>
               ))}
             </tbody>
@@ -172,6 +188,20 @@ export function Configuracoes() {
                   <td>{integracao.provedor}</td>
                   <td>{integracao.cliente}</td>
                   <td><Badge tone={integracao.status.toLowerCase().includes('ativo') ? 'green' : 'orange'}>{integracao.status}</Badge></td>
+                      <td className="row-expand-cell"><button title="Abrir detalhe" onClick={(event) => { event.stopPropagation(); onOpenDetail?.({
+                        title: integracao.nome,
+                        subtitle: integracao.provedor,
+                        badge: integracao.status,
+                        badgeTone: integracao.status,
+                        description: 'Integração selecionada para revisão de acesso, autenticação e status.',
+                        meta: [
+                          { label: 'Provedor', value: integracao.provedor },
+                          { label: 'Cliente', value: integracao.cliente },
+                          { label: 'Autenticação', value: integracao.autenticacao },
+                          { label: 'Atualizado em', value: formatDate(integracao.atualizadoEm) }
+                        ],
+                        actions: ['Editar integração', 'Testar conexão', 'Desativar']
+                      }); }}><Maximize2 size={15} /></button></td>
                 </tr>
               ))}
             </tbody>
@@ -205,6 +235,20 @@ export function Configuracoes() {
                 <td>{usuario.cliente}</td>
                 <td>{formatDate(usuario.ultimoLogin)}</td>
                 <td><Badge tone={usuario.status.toLowerCase().includes('ativo') ? 'green' : 'orange'}>{usuario.status}</Badge></td>
+                    <td className="row-expand-cell"><button title="Abrir detalhe" onClick={(event) => { event.stopPropagation(); onOpenDetail?.({
+                      title: usuario.nome,
+                      subtitle: usuario.email,
+                      badge: usuario.status,
+                      badgeTone: usuario.status,
+                      description: 'Usuário selecionado para revisão de perfil, cliente e acesso.',
+                      meta: [
+                        { label: 'E-mail', value: usuario.email },
+                        { label: 'Perfil', value: usuario.perfil },
+                        { label: 'Cliente', value: usuario.cliente },
+                        { label: 'Último login', value: formatDate(usuario.ultimoLogin) }
+                      ],
+                      actions: ['Editar usuário', 'Gerenciar permissões', 'Desativar']
+                    }); }}><Maximize2 size={15} /></button></td>
               </tr>
             ))}
           </tbody>

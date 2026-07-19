@@ -1,3 +1,4 @@
+import { Maximize2 } from 'lucide-react';
 import { PageHeader } from '../components/PageHeader';
 import { KpiCard } from '../components/KpiCard';
 import { Badge } from '../components/Badge';
@@ -5,13 +6,14 @@ import { DataSourceNotice } from '../components/DataSourceNotice';
 import { documentos as mockDocumentos } from '../data/mock';
 import { useAsyncData } from '../hooks/useAsyncData';
 import { fetchDocumentos } from '../services/radarApi';
+import type { PageProps } from '../App';
 
 const isActive = (status: string) => {
   const normalized = status.toLowerCase();
   return normalized.includes('ativo') || normalized.includes('publicado') || normalized.includes('vigente');
 };
 
-export function BaseConhecimento() {
+export function BaseConhecimento({ onSelectDetail, onOpenDetail }: PageProps) {
   const { data, source, loading, error } = useAsyncData(fetchDocumentos, mockDocumentos);
 
   const total = data.length;
@@ -72,7 +74,7 @@ export function BaseConhecimento() {
           </thead>
           <tbody>
             {data.map((documento) => (
-              <tr key={`${documento.titulo}-${documento.publicacao}-${documento.fonte}`}>
+              <tr className="clickable-row" key={`${documento.titulo}-${documento.publicacao}-${documento.fonte}`} onClick={() => onSelectDetail?.({ title: documento.titulo, subtitle: documento.fonte, badge: documento.status, badgeTone: documento.status, description: 'Documento selecionado na base de conhecimento do Radar SUS.', meta: [{ label: 'Tipo', value: documento.tipo }, { label: 'Fonte', value: documento.fonte }, { label: 'Publicação', value: documento.publicacao }, { label: 'Tags', value: documento.tags?.join(', ') || '-' }], actions: ['Gerar ação', 'Ver documento', 'Marcar curadoria'] })}>
                 <td>
                   <strong>{documento.titulo}</strong>
                   <div className="table-subtitle">Base interna do Radar SUS</div>
