@@ -103,3 +103,9 @@ tr:hover td { background: #f7fbf9; }
 .panel-actions button { height: 44px; border: 1px solid var(--slate-200); border-radius: 10px; background: white; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; font-weight: 700; }
 .panel-actions .danger { color: var(--red-500); border-color: #ffc9d0; }
 @media (max-width: 1200px) { .right-panel { display: none; } .content-grid { grid-template-columns: 1fr; } .kpi-grid, .kpi-grid.five { grid-template-columns: repeat(2, 1fr); } .sidebar { width: 230px; } }
+.data-source { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 8px 12px; font-size: 12px; font-weight: 700; margin: -8px 0 18px; border: 1px solid var(--slate-200); }
+.data-source.live { background: #e4f9ef; color: var(--green-700); border-color: #bcebd4; }
+.data-source.mock { background: #fff7dc; color: #8a5a00; border-color: #f8df92; }
+.data-source.loading { background: #e8f0ff; color: var(--blue-700); border-color: #bed1ff; }
+.roadmap-card { margin-top: 18px; }
+.roadmap-card p { margin-bottom: 0; }
