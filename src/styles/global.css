@@ -154,3 +154,42 @@ tr:hover td { background: #f7fbf9; }
     margin-top: 18px;
   }
 }
+
+
+.table-subtitle {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.tag-cell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.knowledge-preview {
+  margin-top: 18px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 8px 16px;
+  margin-top: 16px;
+}
+
+.detail-grid span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.detail-grid strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+
+.atendimento-preview {
+  margin-top: 18px;
+}

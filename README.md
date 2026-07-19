@@ -73,3 +73,35 @@ A tela **Impactos no Produto** passa a usar dados reais da view:
 - `vw_impactos_produto`
 
 A tela calcula indicadores a partir dos registros carregados e mantém fallback demonstrativo caso a consulta falhe.
+
+
+## Versão v5 — Base de Conhecimento conectada
+
+A tela **Base de Conhecimento** passa a exibir melhor os documentos reais vindos da view:
+
+- `vw_documentos_base`
+
+A alteração melhora:
+- indicadores da base;
+- tabela de documentos monitorados;
+- tags e status;
+- prévia do documento selecionado;
+- preparação visual para as futuras áreas de Fontes, Curadoria e Conectores Externos.
+
+A conexão com fontes externas reais permanece no roadmap e não faz parte desta versão do frontend.
+
+
+## Versão v6 — Central de Atendimento conectada
+
+A tela **Central de Atendimento** passa a usar dados reais da view:
+
+- `vw_universe_poc_atendimentos`
+
+A alteração melhora:
+- indicadores de atendimentos;
+- tickets externos vinculados;
+- canais ativos;
+- tabela de acompanhamento;
+- prévia do atendimento selecionado.
+
+Esta versão ainda não executa ações reais nos botões internos.
