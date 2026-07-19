@@ -193,3 +193,21 @@ tr:hover td { background: #f7fbf9; }
 .atendimento-preview {
   margin-top: 18px;
 }
+
+
+.config-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.config-users-card,
+.roadmap-note {
+  margin-top: 18px;
+}
+
+@media (max-width: 1300px) {
+  .config-grid {
+    grid-template-columns: 1fr;
+  }
+}

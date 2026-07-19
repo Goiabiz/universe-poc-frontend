@@ -105,3 +105,50 @@ A alteração melhora:
 - prévia do atendimento selecionado.
 
 Esta versão ainda não executa ações reais nos botões internos.
+
+
+## Versão v7 — Configurações conectada
+
+A tela **Configurações** passa a usar dados reais do projeto `universe-poc`:
+
+- `clientes_contratantes`
+- `integracoes`
+- `usuarios_sistema`
+
+A alteração inclui:
+- indicadores de clientes, integrações, usuários e ambientes;
+- tabela de clientes;
+- tabela de integrações;
+- tabela de usuários;
+- nota de roadmap para perfil, aparência, permissões e conectores externos.
+
+
+## Correção v7.1 — Configurações
+
+Corrige a tela **Configurações** para usar corretamente o cliente Supabase POC já configurado no frontend.
+
+Correção:
+- resolve erro `getPocClient is not defined`;
+- mantém fallback demonstrativo;
+- preserva a leitura de clientes, integrações e usuários.
+
+
+## Correção v7.2 — Configurações por views
+
+A tela **Configurações** passa a consumir views próprias do frontend, em vez de consultar tabelas brutas:
+
+- `vw_frontend_config_clientes`
+- `vw_frontend_config_integracoes`
+- `vw_frontend_config_usuarios`
+
+Isso mantém a estratégia de segurança: o frontend lê views controladas, sem abrir acesso direto às tabelas internas.
+
+
+## Correção v7.3 — Configurações sem tela branca
+
+Corrige a tela **Configurações** para proteger listas antes de usar `.filter()`, `.map()` e `.length`.
+
+Correção:
+- evita tela branca quando uma consulta retorna `undefined`;
+- mantém fallback demonstrativo;
+- preserva uso das views de configuração.

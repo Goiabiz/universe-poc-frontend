@@ -1,5 +1,11 @@
-import { supabasePoc, supabaseUniverso } from '../lib/supabase';
+import {supabasePoc, supabaseUniverso, pocSupabase } from '../lib/supabase';
 import { acoes, alertas, atendimentos, clientes, documentos, impactos, kpis } from '../data/mock';
+
+
+function getPocClient() {
+  return pocSupabase;
+}
+
 
 export type DataSource = 'supabase' | 'mock';
 
@@ -215,4 +221,106 @@ export async function fetchClientes() {
 
     return { data: mapped, error };
   }, clientes);
+}
+
+
+export type ClienteConfig = {
+  nome: string;
+  tipo: string;
+  status: string;
+  plano: string;
+  ambiente: string;
+  integracoes: string;
+  atualizadoEm: string;
+};
+
+export type IntegracaoConfig = {
+  nome: string;
+  provedor: string;
+  status: string;
+  autenticacao: string;
+  cliente: string;
+  atualizadoEm: string;
+};
+
+export type UsuarioConfig = {
+  nome: string;
+  email: string;
+  perfil: string;
+  status: string;
+  cliente: string;
+  ultimoLogin: string;
+};
+
+export async function fetchClientesConfig(): Promise<ClienteConfig[]> {
+  const client = getPocClient();
+
+  if (!client) {
+    throw new Error('Supabase POC não configurado');
+  }
+
+  const { data, error } = await client
+    .from('vw_frontend_config_clientes')
+    .select('nome,tipo,status,plano,ambiente,integracoes,atualizado_em')
+    .order('nome', { ascending: true });
+
+  if (error) throw error;
+
+  return (data ?? []).map((item: any) => ({
+    nome: item.nome ?? '-',
+    tipo: item.tipo ?? '-',
+    status: item.status ?? '-',
+    plano: item.plano ?? 'Padrão',
+    ambiente: item.ambiente ?? 'Produção',
+    integracoes: item.integracoes ?? '0',
+    atualizadoEm: item.atualizado_em ?? '-',
+  }));
+}
+
+export async function fetchIntegracoesConfig(): Promise<IntegracaoConfig[]> {
+  const client = getPocClient();
+
+  if (!client) {
+    throw new Error('Supabase POC não configurado');
+  }
+
+  const { data, error } = await client
+    .from('vw_frontend_config_integracoes')
+    .select('nome,provedor,status,autenticacao,cliente,atualizado_em')
+    .order('nome', { ascending: true });
+
+  if (error) throw error;
+
+  return (data ?? []).map((item: any) => ({
+    nome: item.nome ?? '-',
+    provedor: item.provedor ?? '-',
+    status: item.status ?? '-',
+    autenticacao: item.autenticacao ?? 'não informada',
+    cliente: item.cliente ?? 'Geral',
+    atualizadoEm: item.atualizado_em ?? '-',
+  }));
+}
+
+export async function fetchUsuariosConfig(): Promise<UsuarioConfig[]> {
+  const client = getPocClient();
+
+  if (!client) {
+    throw new Error('Supabase POC não configurado');
+  }
+
+  const { data, error } = await client
+    .from('vw_frontend_config_usuarios')
+    .select('nome,email,perfil,status,cliente,ultimo_login_em')
+    .order('nome', { ascending: true });
+
+  if (error) throw error;
+
+  return (data ?? []).map((item: any) => ({
+    nome: item.nome ?? '-',
+    email: item.email ?? '-',
+    perfil: item.perfil ?? '-',
+    status: item.status ?? '-',
+    cliente: item.cliente ?? 'Operadora',
+    ultimoLogin: item.ultimo_login_em ?? '-',
+  }));
 }

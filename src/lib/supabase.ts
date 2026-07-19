@@ -14,3 +14,5 @@ export const supabasePoc = pocUrl && pocKey && !pocKey.includes('cole_a_chave')
   : null;
 
 export const hasSupabaseConfig = Boolean(supabaseUniverso && supabasePoc);
+
+export const pocSupabase = supabasePoc;
