@@ -1,18 +1,16 @@
 import { createClient } from '@supabase/supabase-js';
 
-const universoUrl = import.meta.env.VITE_SUPABASE_UNIVERSO_URL as string | undefined;
-const universoKey = import.meta.env.VITE_SUPABASE_UNIVERSO_ANON_KEY as string | undefined;
-const pocUrl = import.meta.env.VITE_SUPABASE_POC_URL as string | undefined;
-const pocKey = import.meta.env.VITE_SUPABASE_POC_ANON_KEY as string | undefined;
+const universoUrl = import.meta.env.VITE_SUPABASE_UNIVERSO_URL;
+const universoAnonKey = import.meta.env.VITE_SUPABASE_UNIVERSO_ANON_KEY;
 
-export const supabaseUniverso = universoUrl && universoKey && !universoKey.includes('cole_a_chave')
-  ? createClient(universoUrl, universoKey)
-  : null;
+const pocUrl = import.meta.env.VITE_SUPABASE_POC_URL;
+const pocAnonKey = import.meta.env.VITE_SUPABASE_POC_ANON_KEY;
 
-export const supabasePoc = pocUrl && pocKey && !pocKey.includes('cole_a_chave')
-  ? createClient(pocUrl, pocKey)
-  : null;
+export const universoSupabase =
+  universoUrl && universoAnonKey ? createClient(universoUrl, universoAnonKey) : null;
 
-export const hasSupabaseConfig = Boolean(supabaseUniverso && supabasePoc);
+export const pocSupabase =
+  pocUrl && pocAnonKey ? createClient(pocUrl, pocAnonKey) : null;
 
-export const pocSupabase = supabasePoc;
+export const isUniversoConfigured = Boolean(universoUrl && universoAnonKey);
+export const isPocConfigured = Boolean(pocUrl && pocAnonKey);

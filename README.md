@@ -152,3 +152,33 @@ Correção:
 - evita tela branca quando uma consulta retorna `undefined`;
 - mantém fallback demonstrativo;
 - preserva uso das views de configuração.
+
+
+## Correção v7.4 — Configurações conectando nas views
+
+Corrige a camada `radarApi.ts` e `supabase.ts` para a tela **Configurações** consumir diretamente:
+
+- `vw_frontend_config_clientes`
+- `vw_frontend_config_integracoes`
+- `vw_frontend_config_usuarios`
+
+Também mantém proteção contra tela branca caso alguma consulta falhe.
+
+
+## Correção v7.5 — Compatibilidade Supabase
+
+Corrige a compatibilidade interna da camada de API:
+
+- mantém `universoSupabase` e `pocSupabase`;
+- restaura aliases `supabaseUniverso` e `supabasePoc` usados pelas telas já conectadas;
+- evita retorno para dados demonstrativos por erro de variável indefinida;
+- preserva as views de Configurações.
+
+
+## Correção v7.6 — Indicador Supabase em Configurações
+
+Corrige as funções de Configurações para retornarem o mesmo formato usado pelas demais telas:
+
+- `{ data, source, error }`
+
+Com isso, a tela Configurações passa a exibir corretamente **Dados conectados ao Supabase** quando as views responderem.

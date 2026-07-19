@@ -1,10 +1,14 @@
-import {supabasePoc, supabaseUniverso, pocSupabase } from '../lib/supabase';
+import { universoSupabase, pocSupabase } from '../lib/supabase';
 import { acoes, alertas, atendimentos, clientes, documentos, impactos, kpis } from '../data/mock';
 
-
 function getPocClient() {
+  if (!pocSupabase) throw new Error('Supabase POC não configurado');
   return pocSupabase;
 }
+
+const supabaseUniverso = universoSupabase;
+const supabasePoc = pocSupabase;
+
 
 
 export type DataSource = 'supabase' | 'mock';
@@ -190,7 +194,8 @@ export async function fetchAtendimentos() {
       assunto: safeText(item.titulo, item.intencao_detectada, item.titulo_ticket),
       prioridade: safeText(item.prioridade, 'Média'),
       responsavel: safeText(item.responsavel_nome, 'Não atribuído'),
-      ultima: formatDateTime(item.atualizado_em ?? item.iniciado_em),
+      ultimaInteracao: item.atualizado_em ?? item.iniciado_em ?? '-',
+      ticket: safeText(item.ticket_externo_codigo, item.ticket_externo_url, ''),
       status: safeText(item.status)
     }));
 
@@ -223,7 +228,6 @@ export async function fetchClientes() {
   }, clientes);
 }
 
-
 export type ClienteConfig = {
   nome: string;
   tipo: string;
@@ -252,75 +256,109 @@ export type UsuarioConfig = {
   ultimoLogin: string;
 };
 
-export async function fetchClientesConfig(): Promise<ClienteConfig[]> {
-  const client = getPocClient();
+const fallbackClientesConfig: ClienteConfig[] = [
+  {
+    nome: 'Prefeitura Demonstrativa',
+    tipo: 'Município',
+    status: 'ativo',
+    plano: 'Padrão',
+    ambiente: 'Produção',
+    integracoes: '3',
+    atualizadoEm: '2026-07-19',
+  },
+];
 
-  if (!client) {
-    throw new Error('Supabase POC não configurado');
+const fallbackIntegracoesConfig: IntegracaoConfig[] = [
+  {
+    nome: 'Jira',
+    provedor: 'Atlassian',
+    status: 'ativo',
+    autenticacao: 'OAuth',
+    cliente: 'Prefeitura Demonstrativa',
+    atualizadoEm: '2026-07-19',
+  },
+];
+
+const fallbackUsuariosConfig: UsuarioConfig[] = [
+  {
+    nome: 'Bruno Oliveira',
+    email: 'bruno@exemplo.com',
+    perfil: 'Administrador',
+    status: 'ativo',
+    cliente: 'Operadora',
+    ultimoLogin: '2026-07-19',
+  },
+];
+
+export async function fetchClientesConfig(): Promise<QueryResult<ClienteConfig[]>> {
+  if (!supabasePoc) {
+    return { data: fallbackClientesConfig, source: 'mock', error: 'Supabase POC não configurado' };
   }
 
-  const { data, error } = await client
-    .from('vw_frontend_config_clientes')
-    .select('nome,tipo,status,plano,ambiente,integracoes,atualizado_em')
-    .order('nome', { ascending: true });
+  return tryQuery(async () => {
+    const { data, error } = await supabasePoc
+      .from('vw_frontend_config_clientes')
+      .select('nome,tipo,status,plano,ambiente,integracoes,atualizado_em')
+      .order('nome', { ascending: true });
 
-  if (error) throw error;
+    const mapped = data?.map((item) => ({
+      nome: item.nome ?? '-',
+      tipo: item.tipo ?? '-',
+      status: item.status ?? '-',
+      plano: item.plano ?? 'Padrão',
+      ambiente: item.ambiente ?? 'Produção',
+      integracoes: String(item.integracoes ?? '0'),
+      atualizadoEm: item.atualizado_em ?? '-',
+    }));
 
-  return (data ?? []).map((item: any) => ({
-    nome: item.nome ?? '-',
-    tipo: item.tipo ?? '-',
-    status: item.status ?? '-',
-    plano: item.plano ?? 'Padrão',
-    ambiente: item.ambiente ?? 'Produção',
-    integracoes: item.integracoes ?? '0',
-    atualizadoEm: item.atualizado_em ?? '-',
-  }));
+    return { data: mapped, error };
+  }, fallbackClientesConfig);
 }
 
-export async function fetchIntegracoesConfig(): Promise<IntegracaoConfig[]> {
-  const client = getPocClient();
-
-  if (!client) {
-    throw new Error('Supabase POC não configurado');
+export async function fetchIntegracoesConfig(): Promise<QueryResult<IntegracaoConfig[]>> {
+  if (!supabasePoc) {
+    return { data: fallbackIntegracoesConfig, source: 'mock', error: 'Supabase POC não configurado' };
   }
 
-  const { data, error } = await client
-    .from('vw_frontend_config_integracoes')
-    .select('nome,provedor,status,autenticacao,cliente,atualizado_em')
-    .order('nome', { ascending: true });
+  return tryQuery(async () => {
+    const { data, error } = await supabasePoc
+      .from('vw_frontend_config_integracoes')
+      .select('nome,provedor,status,autenticacao,cliente,atualizado_em')
+      .order('nome', { ascending: true });
 
-  if (error) throw error;
+    const mapped = data?.map((item) => ({
+      nome: item.nome ?? '-',
+      provedor: item.provedor ?? '-',
+      status: item.status ?? '-',
+      autenticacao: item.autenticacao ?? 'não informada',
+      cliente: item.cliente ?? 'Geral',
+      atualizadoEm: item.atualizado_em ?? '-',
+    }));
 
-  return (data ?? []).map((item: any) => ({
-    nome: item.nome ?? '-',
-    provedor: item.provedor ?? '-',
-    status: item.status ?? '-',
-    autenticacao: item.autenticacao ?? 'não informada',
-    cliente: item.cliente ?? 'Geral',
-    atualizadoEm: item.atualizado_em ?? '-',
-  }));
+    return { data: mapped, error };
+  }, fallbackIntegracoesConfig);
 }
 
-export async function fetchUsuariosConfig(): Promise<UsuarioConfig[]> {
-  const client = getPocClient();
-
-  if (!client) {
-    throw new Error('Supabase POC não configurado');
+export async function fetchUsuariosConfig(): Promise<QueryResult<UsuarioConfig[]>> {
+  if (!supabasePoc) {
+    return { data: fallbackUsuariosConfig, source: 'mock', error: 'Supabase POC não configurado' };
   }
 
-  const { data, error } = await client
-    .from('vw_frontend_config_usuarios')
-    .select('nome,email,perfil,status,cliente,ultimo_login_em')
-    .order('nome', { ascending: true });
+  return tryQuery(async () => {
+    const { data, error } = await supabasePoc
+      .from('vw_frontend_config_usuarios')
+      .select('nome,email,perfil,status,cliente,ultimo_login_em')
+      .order('nome', { ascending: true });
 
-  if (error) throw error;
+    const mapped = data?.map((item) => ({
+      nome: item.nome ?? '-',
+      email: item.email ?? '-',
+      perfil: item.perfil ?? '-',
+      status: item.status ?? '-',
+      cliente: item.cliente ?? 'Operadora',
+      ultimoLogin: item.ultimo_login_em ?? '-',
+    }));
 
-  return (data ?? []).map((item: any) => ({
-    nome: item.nome ?? '-',
-    email: item.email ?? '-',
-    perfil: item.perfil ?? '-',
-    status: item.status ?? '-',
-    cliente: item.cliente ?? 'Operadora',
-    ultimoLogin: item.ultimo_login_em ?? '-',
-  }));
+    return { data: mapped, error };
+  }, fallbackUsuariosConfig);
 }
