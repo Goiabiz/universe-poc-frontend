@@ -1,0 +1,49 @@
+import { Bell, BookOpen, Boxes, ChartNoAxesCombined, ChevronLeft, CircleHelp, ClipboardList, Cog, Headphones, Home, Menu, Search, ShieldAlert, UserRound } from 'lucide-react';
+import type { PageKey } from '../App';
+
+const navItems: Array<{ key: PageKey; label: string; icon: React.ReactNode }> = [
+  { key: 'dashboard', label: 'Dashboard', icon: <Home size={21} /> },
+  { key: 'alertas', label: 'Alertas Inteligentes', icon: <ShieldAlert size={21} /> },
+  { key: 'analise', label: 'Análise e Ações', icon: <ChartNoAxesCombined size={21} /> },
+  { key: 'base', label: 'Base de Conhecimento', icon: <BookOpen size={21} /> },
+  { key: 'atendimento', label: 'Central de Atendimento', icon: <Headphones size={21} /> },
+  { key: 'config', label: 'Configurações', icon: <Cog size={21} /> },
+  { key: 'impactos', label: 'Impactos no Produto', icon: <Boxes size={21} /> }
+];
+
+export function Layout({ activePage, onNavigate, children, rightPanel }: { activePage: PageKey; onNavigate: (page: PageKey) => void; children: React.ReactNode; rightPanel?: React.ReactNode }) {
+  return (
+    <div className="app-shell">
+      <aside className="sidebar">
+        <div className="brand">
+          <Menu size={22} />
+          <span>Radar <strong>SUS</strong></span>
+          <div className="radar-mark" />
+        </div>
+        <nav>
+          {navItems.map((item) => (
+            <button key={item.key} className={activePage === item.key ? 'active' : ''} onClick={() => onNavigate(item.key)}>
+              {item.icon}<span>{item.label}</span>
+            </button>
+          ))}
+        </nav>
+        <button className="collapse-btn"><ChevronLeft size={18} /> Recolher menu</button>
+      </aside>
+      <main className="workspace">
+        <header className="topbar">
+          <div className="search-box"><Search size={18} /><input placeholder="Buscar por documentos, alertas, módulos, funcionalidades..." /><kbd>⌘ K</kbd></div>
+          <div className="topbar-actions">
+            <button className="environment"><span /> Ambiente: <strong>Produção</strong></button>
+            <button className="icon-btn"><Bell size={19} /><em>12</em></button>
+            <button className="icon-btn"><CircleHelp size={19} /></button>
+            <div className="user-area"><div className="avatar"><UserRound size={18} /></div><div><strong>Bruno Oliveira</strong><small>Administrador</small></div></div>
+          </div>
+        </header>
+        <div className="content-grid">
+          <section className="page-content">{children}</section>
+          <aside className="right-panel">{rightPanel}</aside>
+        </div>
+      </main>
+    </div>
+  );
+}
