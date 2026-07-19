@@ -39,21 +39,21 @@ export function Dashboard({ onSelectDetail, onOpenDetail }: PageProps) {
 
   return (
     <>
-      <PageHeader title="Dashboard" subtitle="Visão executiva da operação" />
+      <PageHeader title="Área de Trabalho" subtitle="Sua visão principal de alertas, impactos, roadmap e ações pendentes" />
       <DataSourceNotice source={source} loading={loading} error={error} />
 
       <div className="kpi-grid five">{dashboardKpis.map((kpi) => <KpiCard key={kpi.label} {...kpi} />)}</div>
 
       <div className="dashboard-grid">
-        <div className="card large"><div className="section-title-row"><h3>Evolução de alertas</h3><span className="small-muted">visual demonstrativo</span></div><div className="fake-chart"><span /><span /><span /><span /></div></div>
-        <div className="card"><div className="section-title-row"><h3>Criticidade</h3><span className="small-muted">{source === 'supabase' ? 'base real' : 'mock'}</span></div><div className="donut"><strong>{criticidadeTotal}</strong></div><p className="muted">Alertas e impactos classificados no período.</p></div>
+        <div className="card large"><div className="section-title-row"><h3>Evolução operacional</h3><span className="small-muted">visual demonstrativo</span></div><div className="fake-chart"><span /><span /><span /><span /></div></div>
+        <div className="card"><div className="section-title-row"><h3>Criticidade</h3><span className="small-muted">{source === 'supabase' ? 'base real' : 'mock'}</span></div><div className="donut"><strong>{criticidadeTotal}</strong></div><p className="muted">Alertas, impactos e decisões classificados no período.</p></div>
       </div>
 
       <SmartFilters search={search} onSearch={setSearch} status={status} onStatus={setStatus} placeholder="Filtrar últimos alertas..." />
 
       <div className="split-grid">
         <div className="card">
-          <div className="section-title-row"><h3>Últimos alertas</h3><span className="small-muted">{latestAlertas.length} registros</span></div>
+          <div className="section-title-row"><h3>Alertas recentes</h3><span className="small-muted">{latestAlertas.length} registros</span></div>
           <table>
             <thead><tr><th>Criticidade</th><th>Título</th><th>Fonte</th><th>Status</th><th>Ações</th></tr></thead>
             <tbody>
@@ -88,7 +88,7 @@ export function Dashboard({ onSelectDetail, onOpenDetail }: PageProps) {
         </div>
 
         <div className="card">
-          <div className="section-title-row"><h3>Impactos recentes</h3><span className="small-muted">{latestImpactos.length} registros</span></div>
+          <div className="section-title-row"><h3>Mapa de impactos recente</h3><span className="small-muted">{latestImpactos.length} registros</span></div>
           {latestImpactos.map((i) => {
             const detail = {
               title: i.funcionalidade,

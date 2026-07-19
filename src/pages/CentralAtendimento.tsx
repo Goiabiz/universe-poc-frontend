@@ -58,7 +58,7 @@ export function CentralAtendimento({ onSelectDetail, onOpenDetail }: PageProps) 
 
   return (
     <>
-      <PageHeader title="Central de Atendimento" subtitle="Atendimentos, tickets e integrações em acompanhamento" action={<button className="secondary-btn">Novo atendimento</button>} />
+      <PageHeader title="Central de Atendimento" subtitle="Demandas de clientes, tickets e sinais operacionais que alimentam impactos e roadmap" action={<button className="secondary-btn">Novo atendimento</button>} />
       <div className="tabs"><button className="active">Atendimentos</button><button>Tickets</button><button>Integrações</button></div>
       <DataSourceNotice source={result.source} loading={result.loading} error={result.error} />
 
@@ -82,7 +82,7 @@ export function CentralAtendimento({ onSelectDetail, onOpenDetail }: PageProps) 
                 subtitle: atendimento.cliente,
                 badge: atendimento.prioridade,
                 badgeTone: atendimento.prioridade,
-                description: 'Atendimento selecionado para acompanhamento operacional e vínculo com ticket.',
+                description: 'Atendimento selecionado para vínculo com alerta, impacto, orientação ou item de roadmap.',
                 meta: [
                   { label: 'Canal', value: atendimento.canal },
                   { label: 'Cliente', value: atendimento.cliente },
@@ -91,7 +91,7 @@ export function CentralAtendimento({ onSelectDetail, onOpenDetail }: PageProps) 
                   { label: 'Status', value: atendimento.status },
                   { label: 'Ticket', value: atendimento.ticket || '-' }
                 ],
-                actions: ['Responder', 'Abrir ticket', 'Vincular alerta']
+                actions: ['Responder', 'Vincular impacto', 'Enviar para Roadmap']
               };
               return (
                 <tr className="clickable-row" key={`${atendimento.protocolo ?? atendimento.cliente}-${atendimento.assunto}`} onClick={() => onSelectDetail?.(detail)}>

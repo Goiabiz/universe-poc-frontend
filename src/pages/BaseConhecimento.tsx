@@ -32,7 +32,7 @@ export function BaseConhecimento({ onSelectDetail, onOpenDetail }: PageProps) {
 
   return (
     <>
-      <PageHeader title="Base de Conhecimento" subtitle="Conteúdo monitorado, fontes cadastradas e curadoria da base" action={<button className="secondary-btn">Novo documento</button>} />
+      <PageHeader title="Base de Conhecimento" subtitle="Fontes, documentos, regras e evidências que alimentam o SUSi e os alertas" action={<button className="secondary-btn">Novo documento</button>} />
       <div className="tabs"><button className="active">Documentos</button><button>Fontes</button><button>Curadoria</button></div>
       <DataSourceNotice source={source} loading={loading} error={error} />
 
@@ -56,14 +56,14 @@ export function BaseConhecimento({ onSelectDetail, onOpenDetail }: PageProps) {
                 subtitle: documento.fonte,
                 badge: documento.status,
                 badgeTone: documento.status,
-                description: 'Documento selecionado na base de conhecimento do Radar SUS.',
+                description: 'Documento selecionado como fonte de conhecimento para alertas, impactos, decisões e orientações do SUSi.',
                 meta: [
                   { label: 'Tipo', value: documento.tipo },
                   { label: 'Fonte', value: documento.fonte },
                   { label: 'Publicação', value: documento.publicacao },
                   { label: 'Tags', value: documento.tags?.join(', ') || '-' }
                 ],
-                actions: ['Gerar ação', 'Ver documento', 'Marcar curadoria']
+                actions: ['Gerar alerta', 'Orientar com SUSi', 'Marcar curadoria']
               };
               return (
                 <tr className="clickable-row" key={`${documento.titulo}-${documento.publicacao}-${documento.fonte}`} onClick={() => onSelectDetail?.(detail)}>

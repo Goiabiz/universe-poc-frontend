@@ -34,13 +34,13 @@ export function ImpactosProduto({ onSelectDetail, onOpenDetail }: PageProps) {
 
   return (
     <>
-      <PageHeader title="Impactos no Produto" subtitle="Mapeamento de impactos por módulo e funcionalidade" action={<button className="secondary-btn">Exportar</button>} />
+      <PageHeader title="Mapa de Impactos" subtitle="Alcance dos impactos por produto, cliente, serviço, persona e risco operacional" action={<button className="secondary-btn">Exportar</button>} />
       <DataSourceNotice source={source} loading={loading} error={error} />
 
       <div className="kpi-grid four">
-        <KpiCard label="Impactos totais" value={filtered.length} trend="+8%" tone="green" />
+        <KpiCard label="Impactos mapeados" value={filtered.length} trend="+8%" tone="green" />
         <KpiCard label="Críticos" value={criticos} trend="atenção necessária" tone="red" />
-        <KpiCard label="Clientes afetados" value={clientes || filtered.length} trend="+6%" tone="blue" />
+        <KpiCard label="Alcance identificado" value={clientes || filtered.length} trend="+6%" tone="blue" />
         <KpiCard label="Ações em curso" value={ativos} trend="+3%" tone="orange" />
       </div>
 
@@ -49,7 +49,7 @@ export function ImpactosProduto({ onSelectDetail, onOpenDetail }: PageProps) {
       <div className="card">
         <div className="section-title-row"><h3>Impactos mapeados</h3><span className="small-muted">{filtered.length} registros</span></div>
         <table>
-          <thead><tr><th>Módulo</th><th>Funcionalidade</th><th>Origem</th><th>Criticidade</th><th>Cliente</th><th>Status</th><th>Ações</th></tr></thead>
+          <thead><tr><th>Módulo</th><th>Funcionalidade</th><th>Origem</th><th>Criticidade</th><th>Cliente</th><th>Persona / Serviço</th><th>Status</th><th>Ações</th></tr></thead>
           <tbody>
             {filtered.map((item) => {
               const detail = {
@@ -57,7 +57,7 @@ export function ImpactosProduto({ onSelectDetail, onOpenDetail }: PageProps) {
                 subtitle: item.modulo,
                 badge: item.criticidade,
                 badgeTone: item.criticidade,
-                description: 'Impacto selecionado para análise de produto, cliente e ação necessária.',
+                description: 'Impacto selecionado para análise de alcance em produto, cliente, serviço, persona afetada e ação recomendada.',
                 meta: [
                   { label: 'Módulo', value: item.modulo },
                   { label: 'Funcionalidade', value: item.funcionalidade },
@@ -65,7 +65,7 @@ export function ImpactosProduto({ onSelectDetail, onOpenDetail }: PageProps) {
                   { label: 'Cliente', value: item.cliente },
                   { label: 'Status', value: item.status }
                 ],
-                actions: ['Gerar ação', 'Ver documento', 'Marcar revisão']
+                actions: ['Enviar para Roadmap', 'Gerar orientação SUSi', 'Marcar revisão']
               };
               return (
                 <tr className="clickable-row" key={`${item.modulo}-${item.funcionalidade}-${item.origem}-${item.status}`} onClick={() => onSelectDetail?.(detail)}>

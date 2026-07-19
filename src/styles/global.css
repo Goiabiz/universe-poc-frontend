@@ -971,3 +971,73 @@ html[data-density="compact"] th {
     grid-template-columns: 1fr;
   }
 }
+
+
+
+/* v12 - Nomenclatura comercial, mapa de impactos e personas */
+.impact-scope-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 14px 0;
+}
+
+.scope-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbfa 100%);
+  border: 1px solid rgba(0, 120, 77, 0.13);
+  border-radius: 18px;
+  padding: 16px;
+  display: grid;
+  gap: 7px;
+  box-shadow: var(--shadow);
+}
+
+.scope-card strong {
+  color: var(--text);
+  font-size: 15px;
+}
+
+.scope-card span {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.persona-map-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.persona-map-card {
+  border: 1px solid rgba(15, 35, 70, 0.08);
+  background: #fbfcff;
+  border-radius: 16px;
+  padding: 16px;
+  display: grid;
+  gap: 7px;
+}
+
+.persona-map-card strong {
+  color: var(--text);
+  font-size: 15px;
+}
+
+.persona-map-card span {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+@media (max-width: 1100px) {
+  .impact-scope-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .impact-scope-grid,
+  .persona-map-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -31,7 +31,7 @@ export function Alertas({ onSelectDetail, onOpenDetail }: PageProps) {
 
   return (
     <>
-      <PageHeader title="Alertas Inteligentes" subtitle="Monitoramento proativo de mudanças e riscos" />
+      <PageHeader title="Central de Alertas" subtitle="Monitoramento de mudanças, riscos e sinais que exigem atenção" />
       <DataSourceNotice source={source} loading={loading} error={error} />
 
       <div className="kpi-grid four">
@@ -54,15 +54,17 @@ export function Alertas({ onSelectDetail, onOpenDetail }: PageProps) {
                 subtitle: a.fonte,
                 badge: a.criticidade,
                 badgeTone: a.criticidade,
-                description: 'Alerta selecionado para análise de impacto e encaminhamento operacional.',
+                description: 'Alerta selecionado para análise de alcance, impacto e orientação do SUSi.',
                 meta: [
                   { label: 'Fonte', value: a.fonte },
                   { label: 'Data/Hora', value: a.data },
                   { label: 'Módulo', value: a.modulo },
+                      { label: 'Persona afetada', value: 'PO, Suporte, Gestor municipal' },
+                      { label: 'Serviço afetado', value: 'Faturamento / Regulação / Atendimento' },
                   { label: 'Funcionalidade', value: a.funcionalidade },
                   { label: 'Status', value: a.status }
                 ],
-                actions: ['Gerar ação', 'Ver documento', 'Descartar']
+                actions: ['Enviar para Roadmap', 'Gerar orientação SUSi', 'Descartar']
               };
               return (
                 <tr className="clickable-row" key={`${a.titulo}-${a.data}`} onClick={() => onSelectDetail?.(detail)}>

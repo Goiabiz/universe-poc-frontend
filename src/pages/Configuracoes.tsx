@@ -111,13 +111,13 @@ export function Configuracoes({ onSelectDetail, onOpenDetail }: PageProps) {
 
   return (
     <>
-      <PageHeader title="Configurações" subtitle="Parâmetros principais da operação, clientes, integrações e usuários" action={<button className="secondary-btn">Nova configuração</button>} />
+      <PageHeader title="Configurações" subtitle="Ambiente, clientes, integrações, usuários, personas e preferências operacionais" action={<button className="secondary-btn">Nova configuração</button>} />
 
       <div className="tabs">
         <button className="active">Clientes</button>
         <button>Integrações</button>
         <button>Usuários</button>
-        <button>Aparência</button>
+        <button>Aparência</button><button>Personas</button>
       </div>
 
       <DataSourceNotice source={source} loading={loading} error={error} />
@@ -237,6 +237,40 @@ export function Configuracoes({ onSelectDetail, onOpenDetail }: PageProps) {
           </tbody>
         </table>
       </div>
+
+
+<section className="workspace-settings-panel">
+  <div className="workspace-settings-header">
+    <div>
+      <h2>Mapa de Personas e Alcance Operacional</h2>
+      <p>Camada preparada para classificar impactos por gestor, coordenação, serviço, unidade e operador afetado.</p>
+    </div>
+    <span className="badge badge-blue">Roadmap funcional</span>
+  </div>
+
+  <div className="persona-map-grid">
+    <div className="persona-map-card">
+      <strong>Gestão regional/interfederativa</strong>
+      <span>CIT, CIB, DRS, DIR, áreas técnicas estaduais e regionais.</span>
+    </div>
+    <div className="persona-map-card">
+      <strong>Gestão municipal</strong>
+      <span>Secretário, gestor municipal, planejamento, regulação, faturamento, auditoria e TI.</span>
+    </div>
+    <div className="persona-map-card">
+      <strong>Coordenações de serviço</strong>
+      <span>Atenção Básica, Especializada, VISA, VE, CAPS, IST, Farmácia, Laboratório, Transporte e TFD.</span>
+    </div>
+    <div className="persona-map-card">
+      <strong>Operação de unidade</strong>
+      <span>UBS, CAPS, UPA, sala de vacina, farmácia, laboratório, regulação e recepção.</span>
+    </div>
+  </div>
+
+  <p className="workspace-settings-note">
+    O SUSi utilizará esse mapa para gerar orientação executiva, gerencial, operacional e técnica conforme a persona impactada.
+  </p>
+</section>
 
       <section className="workspace-settings-panel">
         <div className="workspace-settings-header">

@@ -13,12 +13,12 @@ export type PanelDetail = {
 type Variant = 'dashboard' | 'alerta' | 'acao' | 'documento' | 'atendimento' | 'impacto' | 'config';
 
 const titles: Record<Variant, string> = {
-  dashboard: 'Resumo do dia',
-  alerta: 'Detalhes do alerta',
-  acao: 'Detalhes da ação',
+  dashboard: 'Área de Trabalho',
+  alerta: 'Central de Alertas',
+  acao: 'Roadmap',
   documento: 'Documento selecionado',
   atendimento: 'Atendimento selecionado',
-  impacto: 'Detalhes do impacto',
+  impacto: 'Mapa de Impactos',
   config: 'Detalhes da configuração'
 };
 
@@ -27,17 +27,17 @@ const defaults: Record<Variant, PanelDetail> = {
     title: 'Principais insights',
     badge: 'Resumo',
     badgeTone: 'blue',
-    description: 'Selecione um item em uma lista para ver detalhes, vínculos e ações rápidas neste painel.',
+    description: 'Selecione um item para visualizar impacto, persona afetada, orientação do SUSi e encaminhamento recomendado.',
     meta: [
       { label: 'Status', value: 'Operação monitorada' },
       { label: 'Origem', value: 'Dashboard' }
     ]
   },
-  alerta: { title: 'Nenhum alerta selecionado', badge: 'Alerta', badgeTone: 'red', description: 'Clique em um alerta da tabela para visualizar criticidade, origem, status e módulo impactado.' },
-  acao: { title: 'Nenhuma ação selecionada', badge: 'Ação', badgeTone: 'orange', description: 'Clique em uma pendência para visualizar responsável, prazo, criticidade e encaminhamento.' },
+  alerta: { title: 'Nenhum alerta selecionado', badge: 'Alerta', badgeTone: 'red', description: 'Clique em um alerta para visualizar criticidade, origem, alcance, persona afetada e orientação do SUSi.' },
+  acao: { title: 'Nenhum item de roadmap selecionado', badge: 'Roadmap', badgeTone: 'orange', description: 'Clique em uma decisão para visualizar prioridade, responsável, prazo, vínculo com alerta/impacto e próximo encaminhamento.' },
   documento: { title: 'Nenhum documento selecionado', badge: 'Documento', badgeTone: 'blue', description: 'Clique em um documento para visualizar fonte, tipo, publicação, tags e status.' },
   atendimento: { title: 'Nenhum atendimento selecionado', badge: 'Atendimento', badgeTone: 'green', description: 'Clique em um atendimento para visualizar cliente, canal, prioridade, status e ticket vinculado.' },
-  impacto: { title: 'Nenhum impacto selecionado', badge: 'Impacto', badgeTone: 'red', description: 'Clique em um impacto para visualizar módulo, funcionalidade, cliente, criticidade e status.' },
+  impacto: { title: 'Nenhum impacto selecionado', badge: 'Impacto', badgeTone: 'red', description: 'Clique em um impacto para visualizar produto, cliente, serviço, persona afetada, risco e orientação recomendada.' },
   config: { title: 'Nenhuma configuração selecionada', badge: 'Configuração', badgeTone: 'green', description: 'Clique em cliente, integração ou usuário para visualizar informações de configuração.' }
 };
 
@@ -71,7 +71,7 @@ export function RightPanel({ variant = 'dashboard', detail, onExpand, onClose }:
 
       {current.meta?.length ? (
         <div className="panel-section">
-          <h4>Informações</h4>
+          <h4>Contexto</h4>
           <div className="panel-meta">
             {current.meta.map((item) => (
               <div key={item.label} className="panel-meta-row">

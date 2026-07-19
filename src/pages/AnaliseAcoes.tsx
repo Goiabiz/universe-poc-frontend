@@ -30,13 +30,13 @@ export function AnaliseAcoes({ onSelectDetail, onOpenDetail }: PageProps) {
 
   return (
     <>
-      <PageHeader title="Análise e Ações" subtitle="Triagem, decisão e encaminhamento operacional" />
-      <div className="tabs"><button className="active">Pendências</button><button>Histórico</button></div>
+      <PageHeader title="Roadmap" subtitle="Decisões, priorizações e ações que transformam impacto em entrega" />
+      <div className="tabs"><button className="active">Decisões</button><button>Priorização</button><button>Histórico</button></div>
       <DataSourceNotice source={source} loading={loading} error={error} />
 
       <div className="kpi-grid four">
-        <KpiCard label="Pendências" value={pendencias} trend="fila atual" tone="red" />
-        <KpiCard label="Ações geradas" value={filtered.length} trend="decisões" tone="orange" />
+        <KpiCard label="Decisões pendentes" value={pendencias} trend="fila atual" tone="red" />
+        <KpiCard label="Itens de roadmap" value={filtered.length} trend="decisões" tone="orange" />
         <KpiCard label="Concluídas" value={filtered.length - pendencias || '-'} trend="em evolução" tone="green" />
         <KpiCard label="Aguardando validação" value={aguardando} trend="validação" tone="blue" />
       </div>
@@ -45,7 +45,7 @@ export function AnaliseAcoes({ onSelectDetail, onOpenDetail }: PageProps) {
 
       <div className="card">
         <table>
-          <thead><tr><th>Origem</th><th>Resumo</th><th>Criticidade</th><th>Responsável</th><th>Prazo</th><th>Status</th><th>Ações</th></tr></thead>
+          <thead><tr><th>Origem</th><th>Item de roadmap</th><th>Criticidade</th><th>Responsável</th><th>Prazo</th><th>Status</th><th>Ações</th></tr></thead>
           <tbody>
             {filtered.map((a) => {
               const detail = {
@@ -53,14 +53,14 @@ export function AnaliseAcoes({ onSelectDetail, onOpenDetail }: PageProps) {
                 subtitle: a.origem,
                 badge: a.criticidade,
                 badgeTone: a.criticidade,
-                description: 'Pendência selecionada para decisão, validação ou encaminhamento.',
+                description: 'Item de roadmap selecionado para decisão, priorização, vínculo com impacto e encaminhamento.',
                 meta: [
                   { label: 'Origem', value: a.origem },
                   { label: 'Responsável', value: a.responsavel },
                   { label: 'Prazo', value: a.prazo },
                   { label: 'Status', value: a.status }
                 ],
-                actions: ['Aprovar ação', 'Ver documento', 'Rejeitar']
+                actions: ['Priorizar item', 'Vincular impacto', 'Rejeitar']
               };
               return (
                 <tr className="clickable-row" key={`${a.origem}-${a.resumo}`} onClick={() => onSelectDetail?.(detail)}>
@@ -76,7 +76,7 @@ export function AnaliseAcoes({ onSelectDetail, onOpenDetail }: PageProps) {
             })}
           </tbody>
         </table>
-        {filtered.length === 0 && <p className="empty-note">Nenhuma ação encontrada para os filtros aplicados.</p>}
+        {filtered.length === 0 && <p className="empty-note">Nenhum item de roadmap encontrado para os filtros aplicados.</p>}
       </div>
     </>
   );

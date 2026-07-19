@@ -293,3 +293,28 @@ Consolida os 7 apontamentos do primeiro bloco do front:
 Observação:
 - Edição inline e filtros funcionam em modo front/local para POC.
 - Persistência real de edição, preferências por perfil e rotas dedicadas serão conectadas ao Supabase na próxima fase.
+
+
+## Versão v12 — Nomenclatura comercial, Mapa de Impactos e Personas
+
+Ajusta a narrativa do produto sem alterar a estrutura central construída.
+
+Renomeações:
+- Dashboard → Área de Trabalho
+- Alertas Inteligentes → Central de Alertas
+- Análise e Ações → Roadmap
+- Impactos no Produto → Mapa de Impactos
+
+Escopo consolidado:
+- Base de Conhecimento alimenta o SUSi e a Central de Alertas;
+- Central de Alertas identifica mudanças, riscos e sinais relevantes;
+- Mapa de Impactos cruza produto, cliente, serviço, persona e risco;
+- Roadmap transforma impacto em decisão, prioridade e entrega;
+- Central de Atendimento alimenta a inteligência com demandas reais de cliente;
+- Configurações concentra clientes, integrações, usuários, preferências e personas.
+
+Inclui:
+- blocos visuais de alcance no Mapa de Impactos;
+- camada de personas em Configurações;
+- orientação do SUSi por perfil impactado;
+- preparação para comunicação executiva, gerencial, operacional e técnica.
