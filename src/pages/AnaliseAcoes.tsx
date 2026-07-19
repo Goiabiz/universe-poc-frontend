@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { PageHeader } from '../components/PageHeader';
 import { KpiCard } from '../components/KpiCard';
 import { Badge } from '../components/Badge';
@@ -8,6 +8,7 @@ import { SmartFilters, normalizeFilterText } from '../components/SmartFilters';
 import { acoes } from '../data/mock';
 import { useAsyncData } from '../hooks/useAsyncData';
 import { fetchAcoes } from '../services/radarApi';
+import { getGeneratedRoadmapItems, getOperationalEventName } from '../services/operationalStore';
 import type { PageProps } from '../App';
 
 export function AnaliseAcoes({ onSelectDetail, onOpenDetail }: PageProps) {
@@ -16,8 +17,17 @@ export function AnaliseAcoes({ onSelectDetail, onOpenDetail }: PageProps) {
   const [prioridade, setPrioridade] = useState('');
   const [responsavel, setResponsavel] = useState('');
   const { data, source, loading, error } = useAsyncData(fetchAcoes, acoes);
+      const [generatedItems, setGeneratedItems] = useState(() => getGeneratedRoadmapItems());
 
-  const filtered = data.filter((item) => {
+      useEffect(() => {
+        const refresh = () => setGeneratedItems(getGeneratedRoadmapItems());
+        window.addEventListener(getOperationalEventName(), refresh);
+        return () => window.removeEventListener(getOperationalEventName(), refresh);
+      }, []);
+
+      const allItems = useMemo(() => [...generatedItems, ...data], [generatedItems, data]);
+
+  const filtered = allItems.filter((item) => {
     const text = normalizeFilterText([item.origem, item.resumo, item.criticidade, item.responsavel, item.prazo, item.status].join(' '));
     return (!search || text.includes(normalizeFilterText(search))) &&
       (!status || text.includes(normalizeFilterText(status))) &&

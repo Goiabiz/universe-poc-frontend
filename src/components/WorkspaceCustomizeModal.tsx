@@ -8,7 +8,7 @@ const labels: Record<PageKey, string> = {
   base: 'Base de Conhecimento',
   atendimento: 'Central de Atendimento',
   impactos: 'Impactos no Produto',
-  config: 'Configurações'
+  config: 'Parametrização'
 };
 
 const moduleOptions: Record<PageKey, string[]> = {

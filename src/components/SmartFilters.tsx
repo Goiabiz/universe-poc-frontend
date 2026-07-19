@@ -50,7 +50,7 @@ const modulos: Option[] = [
   { label: 'BPA', value: 'bpa' },
   { label: 'CNES', value: 'cnes' },
   { label: 'SIGTAP', value: 'sigtap' },
-  { label: 'Configurações', value: 'config' }
+  { label: 'Parametrização', value: 'config' }
 ];
 
 export function SmartFilters({

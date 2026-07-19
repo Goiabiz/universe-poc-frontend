@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { X, Maximize2, Clock3, Link2, MessageSquareText, ShieldCheck, Paperclip, GitBranch, CheckCircle2 } from 'lucide-react';
 import type { PanelDetail } from './RightPanel';
+import { createRoadmapItem, discardItem, getHistory, getOperationalEventName, markReview } from '../services/operationalStore';
 
 type TabKey = 'resumo' | 'historico' | 'vinculos' | 'acoes' | 'anexos';
 
@@ -14,8 +15,35 @@ const tabs: Array<{ key: TabKey; label: string }> = [
 
 export function DetailModal({ detail, onClose }: { detail: PanelDetail | null; onClose: () => void }) {
   const [activeTab, setActiveTab] = useState<TabKey>('resumo');
+      const [history, setHistory] = useState(() => detail ? getHistory(detail) : []);
+      const [feedback, setFeedback] = useState('');
 
   if (!detail) return null;
+
+      useEffect(() => {
+        const refresh = () => setHistory(getHistory(detail));
+        refresh();
+        window.addEventListener(getOperationalEventName(), refresh);
+        return () => window.removeEventListener(getOperationalEventName(), refresh);
+      }, [detail.title]);
+
+      const handleRoadmap = () => {
+        createRoadmapItem(detail);
+        setFeedback('Item enviado para o Roadmap.');
+        setActiveTab('acoes');
+      };
+
+      const handleDiscard = () => {
+        discardItem(detail);
+        setFeedback('Item descartado operacionalmente.');
+        setActiveTab('historico');
+      };
+
+      const handleReview = () => {
+        markReview(detail);
+        setFeedback('Item marcado para revisão do PO.');
+        setActiveTab('historico');
+      };
 
   return (
     <div className="modal-backdrop" role="dialog" aria-modal="true">

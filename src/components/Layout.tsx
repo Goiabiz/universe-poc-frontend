@@ -5,12 +5,12 @@ import { loadWorkspacePreferences } from '../lib/preferences';
 
 const navItems: Array<{ key: PageKey; label: string; icon: React.ReactNode }> = [
   { key: 'dashboard', label: 'Área de Trabalho', icon: <Home size={21} /> },
-  { key: 'alertas', label: 'Central de Alertas', icon: <ShieldAlert size={21} /> },
-  { key: 'analise', label: 'Roadmap', icon: <ChartNoAxesCombined size={21} /> },
   { key: 'base', label: 'Base de Conhecimento', icon: <BookOpen size={21} /> },
+  { key: 'alertas', label: 'Central de Alertas', icon: <ShieldAlert size={21} /> },
   { key: 'atendimento', label: 'Central de Atendimento', icon: <Headphones size={21} /> },
-  { key: 'config', label: 'Configurações', icon: <Cog size={21} /> },
-  { key: 'impactos', label: 'Mapa de Impactos', icon: <Boxes size={21} /> }
+  { key: 'impactos', label: 'Mapa de Impactos', icon: <Boxes size={21} /> },
+  { key: 'config', label: 'Parametrização', icon: <Cog size={21} /> },
+  { key: 'analise', label: 'Roadmap', icon: <ChartNoAxesCombined size={21} /> }
 ];
 
 export function Layout({ activePage, onNavigate, children, rightPanel }: { activePage: PageKey; onNavigate: (page: PageKey) => void; children: React.ReactNode; rightPanel?: React.ReactNode }) {

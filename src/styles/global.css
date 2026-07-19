@@ -1,4 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@500;600;700;800;900&display=swap');
+
 :root {
+  --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Montserrat', 'Inter', system-ui, sans-serif;
   --green-900: #003f2a;
   --green-800: #005132;
   --green-700: #006B3F;
@@ -1040,4 +1044,259 @@ html[data-density="compact"] th {
   .persona-map-grid {
     grid-template-columns: 1fr;
   }
+}
+
+
+
+/* v12.2 - Tipografia híbrida: Montserrat + Inter */
+body,
+input,
+select,
+textarea {
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+.brand,
+.sidebar nav button,
+.page-header,
+.kpi-card strong,
+.kpi-card p,
+.tabs button,
+button,
+.badge,
+.data-source,
+.panel-header h2,
+.panel-card h3,
+.detail-modal-header h2,
+.modal-eyebrow,
+.workspace-settings-header h2,
+.scope-card strong,
+.persona-map-card strong {
+  font-family: var(--font-display);
+}
+
+table,
+td,
+th,
+.table-subtitle,
+.muted,
+.small-muted,
+.panel-section p,
+.detail-info-card,
+.timeline,
+.smart-filters input,
+.smart-filters select,
+.inline-row-actions select {
+  font-family: var(--font-body);
+}
+
+h1,
+.page-header h1 {
+  letter-spacing: -0.035em;
+}
+
+h2,
+h3,
+.panel-card h3,
+.detail-modal-header h2 {
+  letter-spacing: -0.025em;
+}
+
+.sidebar nav button,
+button,
+.badge,
+th {
+  letter-spacing: -0.01em;
+}
+
+td,
+.table-subtitle,
+.muted,
+.panel-section p {
+  letter-spacing: -0.005em;
+}
+
+.brand span,
+.brand strong {
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.page-header h1 {
+  font-weight: 900;
+}
+
+.kpi-card strong {
+  font-weight: 900;
+}
+
+.kpi-card p,
+.tabs button,
+.sidebar nav button,
+button {
+  font-weight: 800;
+}
+
+th {
+  font-weight: 800;
+}
+
+td {
+  font-weight: 500;
+}
+
+td strong,
+.panel-card strong,
+.detail-info-card strong {
+  font-weight: 800;
+}
+
+
+
+/* v12.3 - Refinamento fino da tipografia */
+.sidebar nav button {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.018em;
+  line-height: 1.18;
+}
+
+.brand span,
+.brand strong {
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.page-header h1 {
+  font-family: var(--font-display);
+  font-weight: 850;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.kpi-card p {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.018em;
+  line-height: 1.15;
+}
+
+.kpi-card strong {
+  font-family: var(--font-display);
+  font-weight: 850;
+  letter-spacing: -0.035em;
+}
+
+.tabs button,
+.data-source,
+button {
+  font-weight: 700;
+  letter-spacing: -0.012em;
+}
+
+.badge {
+  font-family: var(--font-body);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.panel-header h2,
+.panel-card h3,
+.detail-modal-header h2 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.032em;
+  line-height: 1.08;
+}
+
+th {
+  font-family: var(--font-body);
+  font-weight: 800;
+  letter-spacing: -0.006em;
+}
+
+td {
+  font-family: var(--font-body);
+  font-weight: 500;
+  letter-spacing: -0.004em;
+  line-height: 1.28;
+}
+
+td strong {
+  font-family: var(--font-body);
+  font-weight: 750;
+  letter-spacing: -0.006em;
+  line-height: 1.18;
+}
+
+.inline-row-actions select,
+.smart-filters input,
+.smart-filters select {
+  font-family: var(--font-body);
+  font-weight: 650;
+  letter-spacing: -0.004em;
+}
+
+.table-subtitle,
+.muted,
+.small-muted,
+.panel-section p,
+.workspace-settings-note {
+  font-family: var(--font-body);
+  font-weight: 450;
+  letter-spacing: -0.003em;
+  line-height: 1.42;
+}
+
+.scope-card strong,
+.persona-map-card strong,
+.settings-card h3 {
+  font-family: var(--font-display);
+  font-weight: 750;
+  letter-spacing: -0.025em;
+}
+
+
+
+/* v13 - Ações reais locais e persistência operacional */
+.action-feedback {
+  margin: 8px 0 0;
+  padding: 9px 10px;
+  border-radius: 12px;
+  background: #eefaf5;
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.timeline strong {
+  color: var(--text);
+  font-weight: 800;
+}
+
+.detail-section .action-list button:last-child {
+  color: var(--red);
+  border-color: rgba(255, 59, 90, 0.22);
+}
+
+.inline-row-actions select {
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.inline-row-actions select:focus {
+  outline: none;
+  border-color: rgba(0, 120, 77, 0.32);
+  background: #eefaf5;
+}
+
+.row-icon-btn:focus-visible,
+.detail-modal-actions .icon-btn:focus-visible,
+.panel-header-actions .icon-btn:focus-visible {
+  outline: 3px solid rgba(0, 120, 77, 0.18);
+  outline-offset: 2px;
 }

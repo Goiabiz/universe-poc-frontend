@@ -1,4 +1,5 @@
 import { ArrowRight, CheckCircle2, FileText, Maximize2, PlusCircle, X } from 'lucide-react';
+import { createRoadmapItem, discardItem, markReview } from '../services/operationalStore';
 
 export type PanelDetail = {
   title: string;
@@ -19,7 +20,7 @@ const titles: Record<Variant, string> = {
   documento: 'Documento selecionado',
   atendimento: 'Atendimento selecionado',
   impacto: 'Mapa de Impactos',
-  config: 'Detalhes da configuração'
+  config: 'Detalhes da parametrização'
 };
 
 const defaults: Record<Variant, PanelDetail> = {
@@ -38,7 +39,7 @@ const defaults: Record<Variant, PanelDetail> = {
   documento: { title: 'Nenhum documento selecionado', badge: 'Documento', badgeTone: 'blue', description: 'Clique em um documento para visualizar fonte, tipo, publicação, tags e status.' },
   atendimento: { title: 'Nenhum atendimento selecionado', badge: 'Atendimento', badgeTone: 'green', description: 'Clique em um atendimento para visualizar cliente, canal, prioridade, status e ticket vinculado.' },
   impacto: { title: 'Nenhum impacto selecionado', badge: 'Impacto', badgeTone: 'red', description: 'Clique em um impacto para visualizar produto, cliente, serviço, persona afetada, risco e orientação recomendada.' },
-  config: { title: 'Nenhuma configuração selecionada', badge: 'Configuração', badgeTone: 'green', description: 'Clique em cliente, integração ou usuário para visualizar informações de configuração.' }
+  config: { title: 'Nenhuma parametrização selecionada', badge: 'Parametrização', badgeTone: 'green', description: 'Clique em cliente, integração, usuário ou persona para visualizar parâmetros do ambiente.' }
 };
 
 const toneToClass = (tone?: string) => {

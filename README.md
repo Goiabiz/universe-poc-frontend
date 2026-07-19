@@ -52,7 +52,7 @@ Se o Supabase não estiver configurado ou a política RLS bloquear leitura públ
 2. Trocar fallback mock por dados reais após login.
 3. Criar ações dos botões internos.
 4. Criar detalhes das funcionalidades por módulo.
-5. Criar Configurações > Perfil e Aparência.
+5. Criar Parametrização > Perfil e Aparência.
 
 
 ## Versão v3 — listas reais no dashboard
@@ -107,9 +107,9 @@ A alteração melhora:
 Esta versão ainda não executa ações reais nos botões internos.
 
 
-## Versão v7 — Configurações conectada
+## Versão v7 — Parametrização conectada
 
-A tela **Configurações** passa a usar dados reais do projeto `universe-poc`:
+A tela **Parametrização** passa a usar dados reais do projeto `universe-poc`:
 
 - `clientes_contratantes`
 - `integracoes`
@@ -123,9 +123,9 @@ A alteração inclui:
 - nota de roadmap para perfil, aparência, permissões e conectores externos.
 
 
-## Correção v7.1 — Configurações
+## Correção v7.1 — Parametrização
 
-Corrige a tela **Configurações** para usar corretamente o cliente Supabase POC já configurado no frontend.
+Corrige a tela **Parametrização** para usar corretamente o cliente Supabase POC já configurado no frontend.
 
 Correção:
 - resolve erro `getPocClient is not defined`;
@@ -133,9 +133,9 @@ Correção:
 - preserva a leitura de clientes, integrações e usuários.
 
 
-## Correção v7.2 — Configurações por views
+## Correção v7.2 — Parametrização por views
 
-A tela **Configurações** passa a consumir views próprias do frontend, em vez de consultar tabelas brutas:
+A tela **Parametrização** passa a consumir views próprias do frontend, em vez de consultar tabelas brutas:
 
 - `vw_frontend_config_clientes`
 - `vw_frontend_config_integracoes`
@@ -144,9 +144,9 @@ A tela **Configurações** passa a consumir views próprias do frontend, em vez 
 Isso mantém a estratégia de segurança: o frontend lê views controladas, sem abrir acesso direto às tabelas internas.
 
 
-## Correção v7.3 — Configurações sem tela branca
+## Correção v7.3 — Parametrização sem tela branca
 
-Corrige a tela **Configurações** para proteger listas antes de usar `.filter()`, `.map()` e `.length`.
+Corrige a tela **Parametrização** para proteger listas antes de usar `.filter()`, `.map()` e `.length`.
 
 Correção:
 - evita tela branca quando uma consulta retorna `undefined`;
@@ -154,9 +154,9 @@ Correção:
 - preserva uso das views de configuração.
 
 
-## Correção v7.4 — Configurações conectando nas views
+## Correção v7.4 — Parametrização conectando nas views
 
-Corrige a camada `radarApi.ts` e `supabase.ts` para a tela **Configurações** consumir diretamente:
+Corrige a camada `radarApi.ts` e `supabase.ts` para a tela **Parametrização** consumir diretamente:
 
 - `vw_frontend_config_clientes`
 - `vw_frontend_config_integracoes`
@@ -172,16 +172,16 @@ Corrige a compatibilidade interna da camada de API:
 - mantém `universoSupabase` e `pocSupabase`;
 - restaura aliases `supabaseUniverso` e `supabasePoc` usados pelas telas já conectadas;
 - evita retorno para dados demonstrativos por erro de variável indefinida;
-- preserva as views de Configurações.
+- preserva as views de Parametrização.
 
 
-## Correção v7.6 — Indicador Supabase em Configurações
+## Correção v7.6 — Indicador Supabase em Parametrização
 
-Corrige as funções de Configurações para retornarem o mesmo formato usado pelas demais telas:
+Corrige as funções de Parametrização para retornarem o mesmo formato usado pelas demais telas:
 
 - `{ data, source, error }`
 
-Com isso, a tela Configurações passa a exibir corretamente **Dados conectados ao Supabase** quando as views responderem.
+Com isso, a tela Parametrização passa a exibir corretamente **Dados conectados ao Supabase** quando as views responderem.
 
 
 ## Versão v9 — Detalhe expandido em modal
@@ -200,7 +200,7 @@ Inclui:
 Nesta versão, o modal é visual e contextual. As abas e ações ainda não executam fluxo real.
 
 
-## Correção v9.1 — Ajuste de import em Configurações
+## Correção v9.1 — Ajuste de import em Parametrização
 
 Corrige erro de parse em `src/pages/Configuracoes.tsx`, onde o import de `PageProps` havia sido inserido dentro de um import já aberto.
 
@@ -261,9 +261,9 @@ Conceito:
 - Usuário = personaliza layout, colunas, filtros e painel conforme seu uso.
 
 
-## Correção v10.1 — Personalização movida para Configurações
+## Correção v10.1 — Personalização movida para Parametrização
 
-Remove a personalização do topo global e concentra a configuração da área de trabalho dentro de **Configurações > Aparência/Área de trabalho**.
+Remove a personalização do topo global e concentra a configuração da área de trabalho dentro de **Parametrização > Aparência/Área de trabalho**.
 
 Inclui:
 - preferências salvas em `localStorage`;
@@ -311,10 +311,84 @@ Escopo consolidado:
 - Mapa de Impactos cruza produto, cliente, serviço, persona e risco;
 - Roadmap transforma impacto em decisão, prioridade e entrega;
 - Central de Atendimento alimenta a inteligência com demandas reais de cliente;
-- Configurações concentra clientes, integrações, usuários, preferências e personas.
+- Parametrização concentra clientes, integrações, usuários, preferências e personas.
 
 Inclui:
 - blocos visuais de alcance no Mapa de Impactos;
-- camada de personas em Configurações;
+- camada de personas em Parametrização;
 - orientação do SUSi por perfil impactado;
 - preparação para comunicação executiva, gerencial, operacional e técnica.
+
+
+## Versão v12.1 — Parametrização e ordem do menu
+
+Ajusta nomenclatura e organização visual do menu.
+
+Alterações:
+- Configurações → Parametrização;
+- Área de Trabalho permanece fixa no topo;
+- demais módulos organizados em ordem alfabética:
+  - Base de Conhecimento;
+  - Central de Alertas;
+  - Central de Atendimento;
+  - Mapa de Impactos;
+  - Parametrização;
+  - Roadmap.
+
+Observação:
+- Os nomes técnicos dos arquivos/componentes foram preservados para evitar refatoração desnecessária nesta etapa.
+- A alteração é visual/conceitual e mantém a estrutura construída.
+
+
+## Versão v12.2 — Tipografia híbrida Montserrat + Inter
+
+Ajusta a identidade visual do Radar SUS com uma composição híbrida:
+
+- Montserrat para títulos, menu, botões, badges, cards e elementos de identidade;
+- Inter para tabelas, textos longos, campos, filtros e leitura operacional.
+
+Objetivo:
+- manter aparência mais premium e comercial;
+- preservar legibilidade em telas densas;
+- melhorar leitura de tabelas, filtros e informações operacionais.
+
+Esta versão já inclui os ajustes da v12.1:
+- Configurações → Parametrização;
+- menu em ordem alfabética com Área de Trabalho fixa no topo.
+
+
+## Versão v12.3 — Refinamento fino da tipografia
+
+Ajusta o peso visual da tipografia híbrida:
+
+- mantém Montserrat nos títulos, identidade, menu e cards;
+- reduz o peso da Montserrat no menu lateral;
+- preserva Inter em tabelas, campos e textos operacionais;
+- torna badges e tabelas menos pesados visualmente;
+- melhora leitura em itens com quebra de linha, como Base de Conhecimento e Central de Atendimento.
+
+Objetivo:
+- preservar aparência premium;
+- evitar excesso de negrito;
+- melhorar conforto visual nas áreas operacionais.
+
+
+## Versão v13 — Ações reais e persistência operacional
+
+Transforma a camada operacional da POC em uma experiência funcional no front/local.
+
+Inclui:
+- edição inline persistente em `localStorage`;
+- alteração de status, prioridade e responsável preservada ao recarregar;
+- envio de item para o Roadmap a partir do painel ou modal;
+- descarte operacional do item;
+- marcação de revisão do PO;
+- histórico operacional local por item;
+- aba Histórico da modal alimentada por ações reais locais;
+- Roadmap passa a exibir itens gerados localmente;
+- store local preparado para futura troca por persistência no Supabase.
+
+Observação:
+- As alterações ainda não gravam no Supabase.
+- A estrutura foi preparada para conectar escrita real em uma próxima etapa sem refazer a experiência.
+- Mantém o refino tipográfico da v12.3.
