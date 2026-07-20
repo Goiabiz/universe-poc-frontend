@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { X, Maximize2, Clock3, Link2, MessageSquareText, ShieldCheck, Paperclip, GitBranch, CheckCircle2 } from 'lucide-react';
 import type { PanelDetail } from './RightPanel';
-import { createRoadmapItem, discardItem, getHistory, getOperationalEventName, markReview } from '../services/operationalStore';
+import { createRoadmapItem, discardItem, getHistory, getOperationalEventName, markReview, type OperationalHistory } from '../services/operationalStore';
 
 type TabKey = 'resumo' | 'historico' | 'vinculos' | 'acoes' | 'anexos';
 
@@ -15,35 +15,38 @@ const tabs: Array<{ key: TabKey; label: string }> = [
 
 export function DetailModal({ detail, onClose }: { detail: PanelDetail | null; onClose: () => void }) {
   const [activeTab, setActiveTab] = useState<TabKey>('resumo');
-      const [history, setHistory] = useState(() => detail ? getHistory(detail) : []);
-      const [feedback, setFeedback] = useState('');
+  const [history, setHistory] = useState<OperationalHistory[]>([]);
+  const [feedback, setFeedback] = useState('');
+
+  useEffect(() => {
+    if (!detail) return;
+
+    const refresh = () => setHistory(getHistory(detail));
+    refresh();
+    window.addEventListener(getOperationalEventName(), refresh);
+
+    return () => window.removeEventListener(getOperationalEventName(), refresh);
+  }, [detail?.title]);
 
   if (!detail) return null;
 
-      useEffect(() => {
-        const refresh = () => setHistory(getHistory(detail));
-        refresh();
-        window.addEventListener(getOperationalEventName(), refresh);
-        return () => window.removeEventListener(getOperationalEventName(), refresh);
-      }, [detail.title]);
+  const handleRoadmap = () => {
+    createRoadmapItem(detail);
+    setFeedback('Item enviado para o Roadmap.');
+    setActiveTab('acoes');
+  };
 
-      const handleRoadmap = () => {
-        createRoadmapItem(detail);
-        setFeedback('Item enviado para o Roadmap.');
-        setActiveTab('acoes');
-      };
+  const handleDiscard = () => {
+    discardItem(detail);
+    setFeedback('Item descartado operacionalmente.');
+    setActiveTab('historico');
+  };
 
-      const handleDiscard = () => {
-        discardItem(detail);
-        setFeedback('Item descartado operacionalmente.');
-        setActiveTab('historico');
-      };
-
-      const handleReview = () => {
-        markReview(detail);
-        setFeedback('Item marcado para revisão do PO.');
-        setActiveTab('historico');
-      };
+  const handleReview = () => {
+    markReview(detail);
+    setFeedback('Item marcado para revisão do PO.');
+    setActiveTab('historico');
+  };
 
   return (
     <div className="modal-backdrop" role="dialog" aria-modal="true">
@@ -107,9 +110,18 @@ export function DetailModal({ detail, onClose }: { detail: PanelDetail | null; o
               <section className="detail-section">
                 <h3>Histórico operacional</h3>
                 <div className="timeline">
-                  <div><Clock3 size={16} /><span>Registro criado a partir da base monitorada</span><small>origem</small></div>
-                  <div><MessageSquareText size={16} /><span>Item disponibilizado para revisão do PO</span><small>triagem</small></div>
-                  <div><ShieldCheck size={16} /><span>Aguardando decisão, validação ou encaminhamento</span><small>atual</small></div>
+                  {history.length ? history.map((item) => (
+                    <div key={item.id}>
+                      <Clock3 size={16} />
+                      <span><strong>{item.action}</strong> — {item.description}</span>
+                      <small>{new Date(item.createdAt).toLocaleString('pt-BR')}</small>
+                    </div>
+                  )) : (
+                    <>
+                      <div><Clock3 size={16} /><span>Registro criado a partir da base monitorada</span><small>origem</small></div>
+                      <div><MessageSquareText size={16} /><span>Aguardando primeira ação operacional</span><small>pendente</small></div>
+                    </>
+                  )}
                 </div>
               </section>
             )}
@@ -129,11 +141,12 @@ export function DetailModal({ detail, onClose }: { detail: PanelDetail | null; o
               <section className="detail-section">
                 <h3>Ações e próximos passos</h3>
                 <div className="action-list">
-                  <button className="primary">{detail.actions?.[0] ?? 'Gerar ação'}</button>
-                  <button>{detail.actions?.[1] ?? 'Ver documento'}</button>
+                  <button className="primary" onClick={handleRoadmap}>{detail.actions?.[0] ?? 'Gerar ação'}</button>
+                  <button onClick={handleReview}>{detail.actions?.[1] ?? 'Marcar revisão'}</button>
                   <button>Adicionar comentário</button>
-                  <button>Enviar para validação</button>
+                  <button onClick={handleDiscard}>Descartar</button>
                 </div>
+                {feedback && <p className="action-feedback">{feedback}</p>}
               </section>
             )}
 
@@ -152,9 +165,10 @@ export function DetailModal({ detail, onClose }: { detail: PanelDetail | null; o
           <aside className="detail-side">
             <section className="detail-section">
               <h3>Ações rápidas</h3>
-              <button className="primary full-width">{detail.actions?.[0] ?? 'Gerar ação'}</button>
-              <button className="full-width">{detail.actions?.[1] ?? 'Ver documento'}</button>
-              <button className="danger full-width">{detail.actions?.[2] ?? 'Descartar'}</button>
+              <button className="primary full-width" onClick={handleRoadmap}>{detail.actions?.[0] ?? 'Gerar ação'}</button>
+              <button className="full-width" onClick={handleReview}>{detail.actions?.[1] ?? 'Marcar revisão'}</button>
+              <button className="danger full-width" onClick={handleDiscard}>{detail.actions?.[2] ?? 'Descartar'}</button>
+              {feedback && <p className="action-feedback">{feedback}</p>}
             </section>
 
             <section className="detail-section">

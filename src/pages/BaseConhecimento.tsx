@@ -18,7 +18,7 @@ const isActive = (status: string) => {
 export function BaseConhecimento({ onSelectDetail, onOpenDetail }: PageProps) {
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('');
-  const { data, source, loading, error } = useAsyncData(fetchDocumentos, mockDocumentos);
+  const { data, source, loading, error, connectionState } = useAsyncData(fetchDocumentos, mockDocumentos);
 
   const filtered = data.filter((documento) => {
     const text = normalizeFilterText([documento.titulo, documento.tipo, documento.fonte, documento.publicacao, documento.status, documento.tags?.join(' ')].join(' '));
@@ -34,7 +34,7 @@ export function BaseConhecimento({ onSelectDetail, onOpenDetail }: PageProps) {
     <>
       <PageHeader title="Base de Conhecimento" subtitle="Fontes, documentos, regras e evidências que alimentam o SUSi e os alertas" action={<button className="secondary-btn">Novo documento</button>} />
       <div className="tabs"><button className="active">Documentos</button><button>Fontes</button><button>Curadoria</button></div>
-      <DataSourceNotice source={source} loading={loading} error={error} />
+      <DataSourceNotice source={source} loading={loading} error={error} connectionState={connectionState} />
 
       <div className="kpi-grid four">
         <KpiCard label="Documentos ativos" value={ativos} trend="lista demonstrativa" tone="green" />

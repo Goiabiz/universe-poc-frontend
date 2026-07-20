@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ArrowRight, CheckCircle2, FileText, Maximize2, PlusCircle, X } from 'lucide-react';
 import { createRoadmapItem, discardItem, markReview } from '../services/operationalStore';
 
@@ -51,7 +52,23 @@ const toneToClass = (tone?: string) => {
 };
 
 export function RightPanel({ variant = 'dashboard', detail, onExpand, onClose }: { variant?: Variant; detail?: PanelDetail | null; onExpand?: (detail: PanelDetail) => void; onClose?: () => void }) {
+  const [feedback, setFeedback] = useState('');
   const current = detail ?? defaults[variant];
+
+  const handleRoadmap = () => {
+    createRoadmapItem(current);
+    setFeedback('Item enviado para o Roadmap.');
+  };
+
+  const handleReview = () => {
+    markReview(current);
+    setFeedback('Item marcado para revisão.');
+  };
+
+  const handleDiscard = () => {
+    discardItem(current);
+    setFeedback('Item descartado.');
+  };
 
   return (
     <div className="panel-card">
@@ -91,9 +108,10 @@ export function RightPanel({ variant = 'dashboard', detail, onExpand, onClose }:
       </div>
 
       <div className="panel-section panel-actions">
-        <button className="primary"><PlusCircle size={17} /> {current.actions?.[0] ?? 'Gerar ação'}</button>
-        <button>{current.actions?.[1] ?? 'Ver documento'}</button>
-        <button className="danger">{current.actions?.[2] ?? 'Descartar'}</button>
+        <button className="primary" onClick={handleRoadmap}><PlusCircle size={17} /> {current.actions?.[0] ?? 'Gerar ação'}</button>
+        <button onClick={handleReview}>{current.actions?.[1] ?? 'Marcar revisão'}</button>
+        <button className="danger" onClick={handleDiscard}>{current.actions?.[2] ?? 'Descartar'}</button>
+        {feedback && <p className="action-feedback">{feedback}</p>}
       </div>
     </div>
   );

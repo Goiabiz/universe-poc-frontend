@@ -18,7 +18,7 @@ export function ImpactosProduto({ onSelectDetail, onOpenDetail }: PageProps) {
   const [status, setStatus] = useState('');
   const [prioridade, setPrioridade] = useState('');
   const [modulo, setModulo] = useState('');
-  const { data, source, loading, error } = useAsyncData(fetchImpactos, mockImpactos);
+  const { data, source, loading, error, connectionState } = useAsyncData(fetchImpactos, mockImpactos);
 
   const filtered = data.filter((item) => {
     const text = normalizeFilterText([item.modulo, item.funcionalidade, item.origem, item.criticidade, item.cliente, item.status].join(' '));
@@ -35,7 +35,7 @@ export function ImpactosProduto({ onSelectDetail, onOpenDetail }: PageProps) {
   return (
     <>
       <PageHeader title="Mapa de Impactos" subtitle="Alcance dos impactos por produto, cliente, serviço, persona e risco operacional" action={<button className="secondary-btn">Exportar</button>} />
-      <DataSourceNotice source={source} loading={loading} error={error} />
+      <DataSourceNotice source={source} loading={loading} error={error} connectionState={connectionState} />
 
       <div className="kpi-grid four">
         <KpiCard label="Impactos mapeados" value={filtered.length} trend="+8%" tone="green" />

@@ -392,3 +392,158 @@ Observação:
 - As alterações ainda não gravam no Supabase.
 - A estrutura foi preparada para conectar escrita real em uma próxima etapa sem refazer a experiência.
 - Mantém o refino tipográfico da v12.3.
+
+
+## Correção v13.1 — Loading e geração de Roadmap
+
+Corrige problemas identificados no teste da v13:
+
+- evita indicador preso em "Carregando dados";
+- aplica timeout de carregamento e usa fallback demonstrativo quando necessário;
+- corrige store operacional local;
+- corrige geração de item no Roadmap;
+- adiciona feedback visual no painel lateral e na modal;
+- Roadmap atualiza ao receber novo item e ao retornar para a aba/janela;
+- mantém ações locais em `localStorage`.
+
+
+## Correção v13.2 — Timeout menos agressivo para Supabase
+
+Ajusta a correção da v13.1 para não cair rápido demais em dados demonstrativos.
+
+Alterações:
+- tempo limite de carregamento aumentado para 12 segundos;
+- mensagem de loading alterada para "Conectando ao Supabase...";
+- mantém fallback demonstrativo apenas quando a consulta demora além do limite ou falha;
+- preserva geração de Roadmap, histórico local e ações operacionais da v13.1.
+
+
+## Correção v13.3 — Carregamento produtivo e Montserrat mais leve
+
+Corrige a estratégia de carregamento:
+
+- remove fallback automático para dados demonstrativos por timeout;
+- mantém a tentativa de conexão com Supabase sem derrubar para mock por demora;
+- usa fallback visual apenas como estrutura enquanto carrega;
+- mostra erro/fallback demonstrativo somente em caso de erro real;
+- limpa novamente a store operacional local;
+- reduz mais o peso da Montserrat no menu, títulos e cards.
+
+Objetivo:
+- evitar falso demonstrativo em ambiente conectado;
+- melhorar experiência de volume futuro;
+- preservar legibilidade e leveza visual.
+
+
+## Versão v13.4 — Roadmap de Governança, Auditoria, Relatórios e Links Seguros
+
+Inclui no roadmap funcional do Radar SUS a frente de governança e segurança operacional.
+
+Escopo previsto:
+
+### Exportação de dados
+- exportar listas, filtros, alertas, impactos, documentos, roadmap e atendimentos;
+- formatos previstos: CSV, XLSX e PDF;
+- controle por perfil, cliente, módulo e permissão.
+
+### Impressão de relatórios
+- impressão de relatórios sintéticos, analíticos e executivos;
+- relatórios por módulo, cliente, período, status, criticidade, responsável e persona impactada;
+- impressão/listagem de atividades e histórico operacional.
+
+### Logs e auditoria de usuários
+Registrar ações com:
+- data;
+- hora;
+- usuário;
+- nome;
+- IP;
+- módulo;
+- funcionalidade;
+- operação realizada;
+- origem da ação;
+- dados anteriores;
+- dados novos;
+- tipo de operação: insert, update, delete, login, exportação, impressão e acesso externo.
+
+### Atividades e histórico
+- histórico por item;
+- histórico por usuário;
+- histórico por módulo;
+- histórico por cliente;
+- linha do tempo de decisão, alteração, exportação e impressão.
+
+### Links externos seguros
+- registrar acesso a links externos;
+- exibir aviso de segurança antes de abrir fonte externa;
+- informar domínio, URL, origem, usuário, data/hora e IP;
+- registrar confirmação de abertura.
+
+### Auditoria do SUSi
+Registrar quando o agente:
+- consultar uma fonte externa;
+- baixar informação;
+- resumir documento;
+- gerar orientação;
+- recomendar ação;
+- vincular documento, alerta, impacto ou item de roadmap.
+
+Diretriz:
+Toda ação que altere dados, gere impacto operacional, exporte informação, imprima relatório, consulte fonte externa ou acione o SUSi deverá gerar registro de auditoria consultável.
+
+
+## Correção v13.5 — Conexão lenta sem travar tela
+
+Ajusta o carregamento para não ficar preso em "Conectando ao Supabase".
+
+Nova regra:
+- tenta conectar ao Supabase normalmente;
+- após 3,5 segundos, libera a tela e mostra aviso de conexão lenta;
+- continua aguardando a resposta do Supabase em segundo plano;
+- se o Supabase responder, troca para "Dados conectados ao Supabase";
+- se houver erro real, mostra aviso de sem conexão;
+- não troca automaticamente para modo demonstrativo por demora.
+
+Objetivo:
+- evitar carregamento infinito;
+- não gerar falso modo demonstrativo;
+- manter a tela utilizável enquanto o Supabase responde.
+
+
+## Versão v14 — Persistência Supabase preparada + Auditoria técnica
+
+Prepara a transição da persistência local para persistência real no Supabase.
+
+Inclui:
+- serviço `operationalSupabase.ts` com contratos de escrita futura;
+- persistência local mantida como comportamento principal da POC;
+- chamadas fire-and-forget preparadas, mas com escrita real desativada por flag;
+- migração SQL sugerida `database/01_migrations/016_operacional_auditoria_workspace_roadmap.sql`;
+- contratos para itens de Roadmap, alterações inline, histórico operacional, auditoria, links externos e auditoria do SUSi.
+
+A escrita real permanece desativada:
+
+```ts
+const ENABLE_SUPABASE_WRITES = false;
+```
+
+Antes de ativar:
+1. aplicar a migração no Supabase correto;
+2. definir policies RLS;
+3. revisar permissões por perfil;
+4. testar insert/update/delete com usuário autenticado;
+5. ativar a flag de escrita real.
+
+
+## Correção v14.1 — Compatibilidade com cliente Supabase existente
+
+Corrige o import do serviço operacional.
+
+A v14 usava `supabasePoc`, mas o projeto exporta:
+
+```ts
+pocSupabase
+universoSupabase
+```
+
+A correção altera `operationalSupabase.ts` para usar `pocSupabase` e mantém a escrita real desativada por flag.

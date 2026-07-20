@@ -15,7 +15,7 @@ export function Alertas({ onSelectDetail, onOpenDetail }: PageProps) {
   const [status, setStatus] = useState('');
   const [prioridade, setPrioridade] = useState('');
   const [modulo, setModulo] = useState('');
-  const { data, source, loading, error } = useAsyncData(fetchAlertas, alertas);
+  const { data, source, loading, error, connectionState } = useAsyncData(fetchAlertas, alertas);
 
   const filtered = data.filter((item) => {
     const text = normalizeFilterText([item.titulo, item.fonte, item.status, item.criticidade, item.modulo, item.funcionalidade].join(' '));
@@ -32,7 +32,7 @@ export function Alertas({ onSelectDetail, onOpenDetail }: PageProps) {
   return (
     <>
       <PageHeader title="Central de Alertas" subtitle="Monitoramento de mudanças, riscos e sinais que exigem atenção" />
-      <DataSourceNotice source={source} loading={loading} error={error} />
+      <DataSourceNotice source={source} loading={loading} error={error} connectionState={connectionState} />
 
       <div className="kpi-grid four">
         <KpiCard label="Alertas totais" value={filtered.length} trend="lista atual" tone="blue" />

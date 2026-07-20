@@ -1300,3 +1300,123 @@ td strong {
   outline: 3px solid rgba(0, 120, 77, 0.18);
   outline-offset: 2px;
 }
+
+
+
+/* v13.3 - Montserrat mais leve e carregamento produtivo */
+.sidebar nav button {
+  font-weight: 650;
+  letter-spacing: -0.012em;
+  line-height: 1.2;
+}
+
+.brand span,
+.brand strong {
+  font-weight: 750;
+  letter-spacing: -0.03em;
+}
+
+.page-header h1 {
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.06;
+}
+
+.panel-header h2,
+.panel-card h3,
+.detail-modal-header h2 {
+  font-weight: 750;
+  letter-spacing: -0.026em;
+}
+
+.kpi-card p {
+  font-weight: 650;
+  letter-spacing: -0.012em;
+  line-height: 1.18;
+}
+
+.kpi-card strong {
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.tabs button,
+button {
+  font-weight: 650;
+  letter-spacing: -0.006em;
+}
+
+.data-source.loading {
+  background: #eef5ff;
+  color: #0b5bd3;
+  border-color: rgba(11, 91, 211, 0.18);
+}
+
+.data-source.mock {
+  background: #fff7e8;
+  color: #8a5a00;
+  border-color: rgba(255, 180, 40, 0.32);
+}
+
+
+
+/* v13.4 - Governança, auditoria, relatórios e links seguros */
+.governance-roadmap-panel {
+  border-color: rgba(11, 91, 211, 0.12);
+}
+
+.governance-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.governance-card {
+  border: 1px solid rgba(15, 35, 70, 0.08);
+  background: #fbfcff;
+  border-radius: 16px;
+  padding: 16px;
+  display: grid;
+  gap: 8px;
+}
+
+.governance-card strong {
+  color: var(--text);
+  font-family: var(--font-display);
+  font-weight: 720;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.governance-card span {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.governance-card small {
+  color: #0b5bd3;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+@media (max-width: 1180px) {
+  .governance-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .governance-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* v13.5 - Estado de conexão lenta sem travar tela */
+.data-source.slow {
+  background: #fff7e8;
+  color: #8a5a00;
+  border-color: rgba(255, 180, 40, 0.32);
+}

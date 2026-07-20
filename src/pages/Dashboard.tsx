@@ -40,7 +40,7 @@ export function Dashboard({ onSelectDetail, onOpenDetail }: PageProps) {
   return (
     <>
       <PageHeader title="Área de Trabalho" subtitle="Sua visão principal de alertas, impactos, roadmap e ações pendentes" />
-      <DataSourceNotice source={source} loading={loading} error={error} />
+      <DataSourceNotice source={source} loading={loading} error={error} connectionState={source === 'supabase' ? 'connected' : loading ? 'connecting' : error ? 'error' : (dashboard.connectionState === 'slow' || alertasData.connectionState === 'slow' || impactosData.connectionState === 'slow') ? 'slow' : 'demo'} />
 
       <div className="kpi-grid five">{dashboardKpis.map((kpi) => <KpiCard key={kpi.label} {...kpi} />)}</div>
 

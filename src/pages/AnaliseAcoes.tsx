@@ -16,13 +16,18 @@ export function AnaliseAcoes({ onSelectDetail, onOpenDetail }: PageProps) {
   const [status, setStatus] = useState('');
   const [prioridade, setPrioridade] = useState('');
   const [responsavel, setResponsavel] = useState('');
-  const { data, source, loading, error } = useAsyncData(fetchAcoes, acoes);
+  const { data, source, loading, error, connectionState } = useAsyncData(fetchAcoes, acoes);
       const [generatedItems, setGeneratedItems] = useState(() => getGeneratedRoadmapItems());
 
       useEffect(() => {
         const refresh = () => setGeneratedItems(getGeneratedRoadmapItems());
         window.addEventListener(getOperationalEventName(), refresh);
-        return () => window.removeEventListener(getOperationalEventName(), refresh);
+        window.addEventListener('focus', refresh);
+        refresh();
+        return () => {
+          window.removeEventListener(getOperationalEventName(), refresh);
+          window.removeEventListener('focus', refresh);
+        };
       }, []);
 
       const allItems = useMemo(() => [...generatedItems, ...data], [generatedItems, data]);
@@ -42,7 +47,7 @@ export function AnaliseAcoes({ onSelectDetail, onOpenDetail }: PageProps) {
     <>
       <PageHeader title="Roadmap" subtitle="Decisões, priorizações e ações que transformam impacto em entrega" />
       <div className="tabs"><button className="active">Decisões</button><button>Priorização</button><button>Histórico</button></div>
-      <DataSourceNotice source={source} loading={loading} error={error} />
+      <DataSourceNotice source={source} loading={loading} error={error} connectionState={connectionState} />
 
       <div className="kpi-grid four">
         <KpiCard label="Decisões pendentes" value={pendencias} trend="fila atual" tone="red" />

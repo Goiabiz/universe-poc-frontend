@@ -120,7 +120,7 @@ export function Configuracoes({ onSelectDetail, onOpenDetail }: PageProps) {
         <button>Aparência</button><button>Personas</button>
       </div>
 
-      <DataSourceNotice source={source} loading={loading} error={error} />
+      <DataSourceNotice source={source} loading={loading} error={error} connectionState={source === 'supabase' ? 'connected' : loading ? 'connecting' : error ? 'error' : (clientesResult.connectionState === 'slow' || integracoesResult.connectionState === 'slow' || usuariosResult.connectionState === 'slow') ? 'slow' : 'demo'} />
 
       <div className="kpi-grid four">
         <KpiCard label="Clientes ativos" value={String(clientesAtivos || clientes.length)} trend="base atual" tone="green" />
@@ -272,6 +272,59 @@ export function Configuracoes({ onSelectDetail, onOpenDetail }: PageProps) {
   </p>
 </section>
 
+
+<section className="workspace-settings-panel governance-roadmap-panel">
+  <div className="workspace-settings-header">
+    <div>
+      <h2>Governança, Auditoria e Relatórios</h2>
+      <p>Camada prevista para controlar exportações, impressões, trilhas de auditoria, atividades e acessos externos realizados pelo usuário ou pelo SUSi.</p>
+    </div>
+    <span className="badge badge-blue">Roadmap de segurança</span>
+  </div>
+
+  <div className="governance-grid">
+    <div className="governance-card">
+      <strong>Exportação de dados</strong>
+      <span>Exportar listas, filtros, alertas, impactos, documentos, roadmap e atendimentos em formatos controlados.</span>
+      <small>Roadmap: CSV, XLSX, PDF e exportação por perfil.</small>
+    </div>
+
+    <div className="governance-card">
+      <strong>Impressão de relatórios</strong>
+      <span>Gerar relatórios impressos por módulo, cliente, período, status, responsável, criticidade e persona impactada.</span>
+      <small>Roadmap: relatório sintético, analítico e executivo.</small>
+    </div>
+
+    <div className="governance-card">
+      <strong>Logs de usuário</strong>
+      <span>Registrar inclusões, alterações, exclusões e acessos com data, hora, usuário, IP, origem e dados alterados.</span>
+      <small>Roadmap: insert, update, delete, login, exportação e impressão.</small>
+    </div>
+
+    <div className="governance-card">
+      <strong>Atividades e histórico</strong>
+      <span>Exibir linha do tempo de atividades por item, usuário, módulo, cliente e ação executada.</span>
+      <small>Roadmap: histórico do item e histórico global do usuário.</small>
+    </div>
+
+    <div className="governance-card">
+      <strong>Links externos seguros</strong>
+      <span>Registrar acessos a links externos e exibir aviso de segurança antes de abrir fontes consultadas.</span>
+      <small>Roadmap: domínio, URL, data, usuário, IP e confirmação de abertura.</small>
+    </div>
+
+    <div className="governance-card">
+      <strong>Auditoria do SUSi</strong>
+      <span>Registrar quando o agente consultar, baixar, resumir ou recomendar conteúdo a partir de fonte externa.</span>
+      <small>Roadmap: fonte, evidência, usuário solicitante, data/hora e orientação gerada.</small>
+    </div>
+  </div>
+
+  <p className="workspace-settings-note">
+    Diretriz: toda ação que gere impacto operacional, exporte informação, consulte fonte externa ou altere dados deverá produzir registro de auditoria consultável.
+  </p>
+</section>
+
       <section className="workspace-settings-panel">
         <div className="workspace-settings-header">
           <div>
@@ -331,6 +384,39 @@ export function Configuracoes({ onSelectDetail, onOpenDetail }: PageProps) {
           Próxima etapa: gravar essas preferências por usuário/perfil no Supabase e permitir variações por módulo, funcionalidade e cliente.
         </p>
       </section>
+
+<section className="workspace-settings-panel">
+  <div className="workspace-settings-header">
+    <div>
+      <h2>Persistência Supabase</h2>
+      <p>Camada técnica preparada para gravar Roadmap, histórico, alterações inline e auditoria assim que as tabelas e políticas forem ativadas.</p>
+    </div>
+    <span className="badge badge-orange">Preparado / desativado</span>
+  </div>
+
+  <div className="governance-grid">
+    <div className="governance-card">
+      <strong>Roadmap operacional</strong>
+      <span>Itens gerados localmente já possuem contrato para gravação futura em tabela operacional.</span>
+      <small>roadmap_itens_operacionais</small>
+    </div>
+    <div className="governance-card">
+      <strong>Histórico do item</strong>
+      <span>Ações do item possuem contrato para histórico consultável por título, usuário e data.</span>
+      <small>historico_operacional</small>
+    </div>
+    <div className="governance-card">
+      <strong>Auditoria de usuário</strong>
+      <span>Alterações, inserts, prints, exports, deletes e acessos externos já têm modelo de auditoria previsto.</span>
+      <small>auditoria_usuario</small>
+    </div>
+  </div>
+
+  <p className="workspace-settings-note">
+    As escritas reais seguem desativadas no front até aplicação da migração, definição de RLS e validação de permissões.
+  </p>
+</section>
+
     </>
   );
 }

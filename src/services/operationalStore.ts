@@ -1,4 +1,5 @@
 import type { PanelDetail } from '../components/RightPanel';
+import { persistAuditLog, persistOperationalHistory, persistOperationalPatch, persistRoadmapItem } from './operationalSupabase';
 
 export type OperationalPatch = {
   title: string;
@@ -39,7 +40,7 @@ const USER = 'Moises Mattos';
 const now = () => new Date().toISOString();
 const eventName = 'radar-sus-operational-updated';
 
-const read = <T,>(key: string, fallback: T): T => {
+const readObject = <T,>(key: string, fallback: T): T => {
   if (typeof window === 'undefined') return fallback;
 
   try {
@@ -75,16 +76,16 @@ export const getDetailKey = (detail: PanelDetail | string) => {
 };
 
 export const getPatch = (detail: PanelDetail | string): OperationalPatch | null => {
-  const patches = read<Record<string, OperationalPatch>>(PATCHES_KEY, {});
+  const patches = readObject<Record<string, OperationalPatch>>(PATCHES_KEY, {});
   return patches[getDetailKey(detail)] ?? null;
 };
 
-export const getAllPatches = () => read<Record<string, OperationalPatch>>(PATCHES_KEY, {});
+export const getAllPatches = () => readObject<Record<string, OperationalPatch>>(PATCHES_KEY, {});
 
 export const addHistory = (title: string, action: string, description: string) => {
   const history = readArray<OperationalHistory>(HISTORY_KEY);
   history.unshift({
-    id: `${Date.now()}-${Math.r&&om().toString(16).slice(2)}`,
+    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
     title,
     action,
     description,
@@ -92,6 +93,17 @@ export const addHistory = (title: string, action: string, description: string) =
     createdAt: now()
   });
   write(HISTORY_KEY, history.slice(0, 200));
+
+  persistOperationalHistory(history[0]).catch(() => undefined);
+  persistAuditLog({
+    usuarioNome: USER,
+    modulo: 'Workspace',
+    operacao: 'susi_action',
+    origem: 'histórico operacional local',
+    registroId: history[0].id,
+    dadosDepois: history[0],
+    observacao: `${action}: ${description}`
+  }).catch(() => undefined);
 };
 
 export const getHistory = (detail: PanelDetail | string) => {
@@ -101,7 +113,7 @@ export const getHistory = (detail: PanelDetail | string) => {
 
 export const updateOperationalPatch = (detail: PanelDetail, patch: Partial<OperationalPatch>) => {
   const title = getDetailKey(detail);
-  const patches = read<Record<string, OperationalPatch>>(PATCHES_KEY, {});
+  const patches = readObject<Record<string, OperationalPatch>>(PATCHES_KEY, {});
   const previous = patches[title];
 
   patches[title] = {
@@ -112,6 +124,17 @@ export const updateOperationalPatch = (detail: PanelDetail, patch: Partial<Opera
   };
 
   write(PATCHES_KEY, patches);
+
+  persistOperationalPatch(patches[title]).catch(() => undefined);
+  persistAuditLog({
+    usuarioNome: USER,
+    modulo: 'Workspace',
+    operacao: 'update',
+    origem: 'edição inline',
+    registroId: title,
+    dadosAntes: previous,
+    dadosDepois: patches[title]
+  }).catch(() => undefined);
 
   const changed = Object.entries(patch)
     .filter(([key]) => key !== 'title' && key !== 'updatedAt')
@@ -127,7 +150,7 @@ export const discardItem = (detail: PanelDetail) => {
 };
 
 export const markReview = (detail: PanelDetail) => {
-  updateOperationalPatch(detail, { status: 'Aguard&&o revisão do PO', revisao: true });
+  updateOperationalPatch(detail, { status: 'Aguardando revisão do PO', revisao: true });
   addHistory(detail.title, 'Revisão solicitada', 'O item foi marcado para revisão do PO.');
 };
 
@@ -141,7 +164,7 @@ export const createRoadmapItem = (detail: PanelDetail) => {
   }
 
   const item: GeneratedRoadmapItem = {
-    id: `${Date.now()}-${Math.r&&om().toString(16).slice(2)}`,
+    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
     origem: detail.title,
     resumo: `Decisão — ${detail.title}`,
     criticidade: detail.badge || 'Média',
@@ -153,6 +176,17 @@ export const createRoadmapItem = (detail: PanelDetail) => {
 
   roadmap.unshift(item);
   write(ROADMAP_KEY, roadmap);
+
+  persistRoadmapItem(item).catch(() => undefined);
+  persistAuditLog({
+    usuarioNome: USER,
+    modulo: 'Roadmap',
+    operacao: 'insert',
+    origem: detail.title,
+    registroId: item.id,
+    dadosDepois: item
+  }).catch(() => undefined);
+
   addHistory(detail.title, 'Item enviado para Roadmap', 'Foi gerado um item de roadmap a partir deste registro.');
   return item;
 };
