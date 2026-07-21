@@ -3,6 +3,7 @@ import { FileText, Pencil, Maximize2, ExternalLink, Info, PlusCircle, Table2, Sh
 import { PageHeader } from '../components/PageHeader';
 import { Badge } from '../components/Badge';
 import { KpiCard } from '../components/KpiCard';
+import { CollapsibleKpiSection } from '../components/CollapsibleKpiSection';
 import { KnowledgeActionsMenu } from '../components/KnowledgeActionsMenu';
 import { DataSourceNotice } from '../components/DataSourceNotice';
 import { SmartFilters, normalizeFilterText } from '../components/SmartFilters';
@@ -103,13 +104,12 @@ export function BaseConhecimento({ onSelectDetail, onOpenDetail }: PageProps) {
   return (
     <>
       <PageHeader
-        title="Base de Conhecimento"
-        subtitle="Gerencie fontes, conteúdos e regras que servem de base para alertas, análises e tarefas."
+        title="Conhecimentos registrados"
         action={<button className="secondary-btn"><PlusCircle size={16} /> Adicionar Conhecimento</button>}
       />
-      <div className="tabs"><button className="active">Conhecimentos</button><button className="disabled-tab" title="Visão de fontes prevista para próxima etapa">Fontes</button><button className="disabled-tab" title="Visão de análises prevista para próxima etapa">Análises</button></div>
       <DataSourceNotice source={source} loading={loading} error={error} connectionState={connectionState} />
 
+      <CollapsibleKpiSection>
       <div className="kpi-grid four knowledge-kpis">
         <div className="tooltip-kpi" title="Total de conhecimentos ativos e disponíveis para consulta por usuários, agentes configurados, alertas, impactos e orientações.">
           <KpiCard label="Conhecimentos ativos" value={ativos || filtered.length} tone="green" />
@@ -128,6 +128,7 @@ export function BaseConhecimento({ onSelectDetail, onOpenDetail }: PageProps) {
           <Info className="kpi-tooltip-icon" size={14} />
         </div>
       </div>
+      </CollapsibleKpiSection>
 
       <SmartFilters
         search={search}

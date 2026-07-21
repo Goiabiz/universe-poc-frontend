@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { PageHeader } from '../components/PageHeader';
 import { KpiCard } from '../components/KpiCard';
+import { CollapsibleKpiSection } from '../components/CollapsibleKpiSection';
 import { Badge } from '../components/Badge';
 import { DataSourceNotice } from '../components/DataSourceNotice';
 import { InlineRowActions } from '../components/InlineRowActions';
@@ -37,12 +38,14 @@ export function ImpactosProduto({ onSelectDetail, onOpenDetail }: PageProps) {
       <PageHeader title="Mapa de Impactos" subtitle="Avalie onde uma mudança pode afetar produto, cliente, operação ou regra de negócio." action={<button className="secondary-btn">Exportar</button>} />
       <DataSourceNotice source={source} loading={loading} error={error} connectionState={connectionState} />
 
+      <CollapsibleKpiSection>
       <div className="kpi-grid four">
         <KpiCard label="Impactos mapeados" value={filtered.length} trend="+8%" tone="green" />
         <KpiCard label="Críticos" value={criticos} trend="atenção necessária" tone="red" />
         <KpiCard label="Alcance identificado" value={clientes || filtered.length} trend="+6%" tone="blue" />
         <KpiCard label="Ações em curso" value={ativos} trend="+3%" tone="orange" />
       </div>
+      </CollapsibleKpiSection>
 
       <SmartFilters search={search} onSearch={setSearch} status={status} onStatus={setStatus} prioridade={prioridade} onPrioridade={setPrioridade} modulo={modulo} onModulo={setModulo} placeholder="Buscar impacto, cliente, módulo ou funcionalidade..." />
 

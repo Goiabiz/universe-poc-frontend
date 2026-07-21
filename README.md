@@ -865,3 +865,112 @@ Ajustes:
 - coluna `Ações` passa a exibir somente ícones e menu;
 - remove lápis duplicado nas ações da linha;
 - mantém lápis de edição somente no hover da descrição do alerta.
+
+
+## Versão v18 — Central de Atendimento em conversas
+
+Central de Atendimento alterada de tabela para estrutura operacional inspirada em atendimento/ticket:
+
+- lista lateral de demandas multicanal;
+- detalhe central do atendimento com abas;
+- painel direito contextual com resumo, SLA, origem, desdobramentos e ações rápidas;
+- atendimento pode nascer de WhatsApp, e-mail, portal, API, telefone ou ticket externo;
+- campos exibidos variam conforme origem;
+- atendimento pode gerar tarefa, alerta, conhecimento e análise de impacto;
+- agente aparece como ação auxiliar, sempre com validação do usuário.
+
+### Abas do atendimento
+- Solicitação;
+- Conversa;
+- Atividades;
+- Anexos;
+- Histórico;
+- Desdobramentos;
+- Base de Conhecimento.
+
+### Campos universais
+- ID do atendimento;
+- canal;
+- origem da demanda;
+- cliente/organização;
+- assunto;
+- status;
+- prioridade;
+- responsável;
+- fila/equipe;
+- recebido em;
+- última interação;
+- SLA;
+- desdobramentos gerados.
+
+### Diretriz de produto
+Central de Atendimento não é apenas chat. Ela é caixa de entrada multicanal com contexto operacional, ações futuras e rastreabilidade.
+
+
+## Correção v18.1 — Central de Atendimento mais operacional
+
+Ajustes:
+- remove botões textuais `Detalhes` e `Expandir` do cabeçalho do atendimento;
+- troca por ícones no padrão das demais telas;
+- reduz abas da Central de Atendimento para `Conversa` e `Anexos`;
+- conversa passa a ser a visão inicial;
+- remove `Atividades`, `Desdobramentos`, `Solicitação` e `Base de Conhecimento` como abas da tela principal;
+- adiciona modal `Gerar ação` para criar tarefa, alerta, conhecimento, solicitação, impacto, orientação ou acionar agente;
+- remove bloco gerencial de desdobramentos do painel direito;
+- mantém apenas contagem discreta de ações vinculadas na origem da demanda;
+- cria componente `CollapsibleKpiSection` para recolher/expandir indicadores;
+- aplica seção de indicadores recolhível nas telas principais.
+
+
+## Correção v18.2 — Atendimento sem painel global
+
+Ajustes:
+- Central de Atendimento não aciona mais o painel direito global da aplicação;
+- remove o ícone de abrir detalhes no painel global;
+- mantém a operação no painel interno da própria Central de Atendimento;
+- troca exemplo `HDK` por número próprio automático de atendimento `ATD-YYYYMMDD-0001`;
+- prioridade fica registrada no bloco interno `Resumo` como `Prioridade do atendimento`.
+
+
+## Correção v18.3 — Atendimentos operacionais
+
+Ajustes:
+- renomeia a seção lateral de `Demandas` para `Atendimentos`;
+- remove as abas `Todas` e `SLA`;
+- mantém apenas `Novos` e `Em andamento`;
+- atendimentos `Aguardando resposta` entram na visão `Em andamento`;
+- concluídos, cancelados e históricos devem ser consultados via relatórios/consultas;
+- SLA passa a ser informação/sinalizador do atendimento, não aba operacional.
+
+
+## v19 — Consolidação visual e estrutural antes dos inserts
+
+Ajustes consolidados:
+- remove `Mapa de Impactos` do menu lateral;
+- impacto passa a ser tratado como campo/qualificação dentro de análise/tarefa;
+- Área de Trabalho fica sem recolher indicadores;
+- demais telas mantêm indicadores antes das abas/filtros, com recolher/expandir somente por ícone;
+- remove textos de recolher/expandir de indicadores;
+- compacta os topos das telas, removendo subtítulos operacionais;
+- troca títulos internos para nomes de funcionalidade:
+  - Conhecimentos registrados
+  - Alertas
+  - Atendimentos
+  - Tarefas
+  - Administração
+- remove abas `Fontes` e `Análises` da Base de Conhecimento;
+- mantém fontes, análise e monitoramento dentro do detalhe/modal do conhecimento;
+- ajusta Central de Atendimento para lista operacional `Novos` e `Em andamento`;
+- remove `Todas` e `SLA` da lista operacional de atendimentos;
+- padroniza Roadmap como lista de tarefas efetivas;
+- Roadmap passa a usar colunas: Descrição da tarefa, Origem, Status, Prioridade, Responsável, Prazo e Ações;
+- Roadmap ganha indicadores operacionais e abas de consulta;
+- Parametrização passa a prever Administração, Cadastros, Integrações, Agentes, Campos de contexto, Modelos de tela e Preferências;
+- menu lateral passa a recolher/expandir por ícone.
+
+
+## v19.1 — Correção Central de Atendimento
+
+Correção:
+- adiciona o estado `inboxStatus` usado nas abas operacionais `Novos` e `Em andamento`;
+- corrige erro de renderização da Central de Atendimento ao abrir a tela.

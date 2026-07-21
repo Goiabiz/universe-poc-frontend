@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { BellPlus, ExternalLink, Maximize2, Pencil } from 'lucide-react';
 import { PageHeader } from '../components/PageHeader';
 import { KpiCard } from '../components/KpiCard';
+import { CollapsibleKpiSection } from '../components/CollapsibleKpiSection';
 import { Badge } from '../components/Badge';
 import { DataSourceNotice } from '../components/DataSourceNotice';
 import { AlertActionsMenu } from '../components/AlertActionsMenu';
@@ -109,12 +110,12 @@ export function Alertas({ onSelectDetail, onOpenDetail }: PageProps) {
   return (
     <>
       <PageHeader
-        title="Central de Alertas"
-        subtitle="Monitore avisos, divulgue para as pessoas certas e acompanhe as ações geradas."
+        title="Alertas"
         action={<button className="secondary-btn"><BellPlus size={16} /> Cadastrar alerta</button>}
       />
       <DataSourceNotice source={source} loading={loading} error={error} connectionState={connectionState} />
 
+      <CollapsibleKpiSection>
       <div className="kpi-grid five alert-kpis">
         <KpiCard label="Alertas ativos" value={ativos} tone="blue" tooltip="Alertas que ainda não foram concluídos, cancelados ou excluídos." />
         <KpiCard label="Alta prioridade" value={criticosAbertos} tone="red" tooltip="Alertas de maior prioridade que ainda exigem tratamento. Alertas concluídos não entram nesta contagem." />
@@ -122,6 +123,7 @@ export function Alertas({ onSelectDetail, onOpenDetail }: PageProps) {
         <KpiCard label="Comunicados enviados" value={comunicados} tone="cyan" tooltip="Total de destinatários ou canais que receberam divulgação dos alertas filtrados." />
         <KpiCard label="Tarefas" value={tarefasGeradas} tone="green" tooltip="Tarefas criadas automaticamente ou manualmente a partir dos alertas." />
       </div>
+      </CollapsibleKpiSection>
 
       <div className="tabs alert-status-tabs">
         <button className={!status ? 'active' : ''} onClick={() => setStatus('')}>Todos</button>

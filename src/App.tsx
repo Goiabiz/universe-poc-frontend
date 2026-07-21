@@ -7,11 +7,10 @@ import { Alertas } from './pages/Alertas';
 import { AnaliseAcoes } from './pages/AnaliseAcoes';
 import { BaseConhecimento } from './pages/BaseConhecimento';
 import { CentralAtendimento } from './pages/CentralAtendimento';
-import { ImpactosProduto } from './pages/ImpactosProduto';
 import { Configuracoes } from './pages/Configuracoes';
 import { applyWorkspacePreferences, loadWorkspacePreferences } from './lib/preferences';
 
-export type PageKey = 'dashboard' | 'alertas' | 'analise' | 'base' | 'atendimento' | 'impactos' | 'config';
+export type PageKey = 'dashboard' | 'alertas' | 'analise' | 'base' | 'atendimento' | 'config';
 
 const rightPanelByPage: Record<PageKey, React.ComponentProps<typeof RightPanel>['variant']> = {
   dashboard: 'dashboard',
@@ -19,7 +18,6 @@ const rightPanelByPage: Record<PageKey, React.ComponentProps<typeof RightPanel>[
   analise: 'acao',
   base: 'documento',
   atendimento: 'atendimento',
-  impactos: 'impacto',
   config: 'config'
 };
 
@@ -55,8 +53,7 @@ export function App() {
     alertas: <Alertas onSelectDetail={handleSelectDetail} onOpenDetail={setExpandedDetail} />,
     analise: <AnaliseAcoes onSelectDetail={handleSelectDetail} onOpenDetail={setExpandedDetail} />,
     base: <BaseConhecimento onSelectDetail={handleSelectDetail} onOpenDetail={setExpandedDetail} />,
-    atendimento: <CentralAtendimento onSelectDetail={handleSelectDetail} onOpenDetail={setExpandedDetail} />,
-    impactos: <ImpactosProduto onSelectDetail={handleSelectDetail} onOpenDetail={setExpandedDetail} />,
+    atendimento: <CentralAtendimento onOpenDetail={setExpandedDetail} />,
     config: <Configuracoes onSelectDetail={handleSelectDetail} onOpenDetail={setExpandedDetail} />
   };
 

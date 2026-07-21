@@ -171,10 +171,10 @@ export function Dashboard({ onOpenDetail }: PageProps) {
 
   return (
     <>
-      <PageHeader title="Área de Trabalho" subtitle="Veja o que precisa de atenção, o que entrou de novo e quais tarefas estão pendentes." />
+      <PageHeader title="Área de Trabalho" />
       <DataSourceNotice source={source} loading={loading} error={error} connectionState={source === 'supabase' ? 'connected' : loading ? 'connecting' : error ? 'error' : (dashboard.connectionState === 'slow' || alertasData.connectionState === 'slow' || documentosData.connectionState === 'slow') ? 'slow' : 'demo'} />
 
-      <div className="kpi-grid five dashboard-kpis">
+            <div className="kpi-grid five dashboard-kpis">
         {cards.map((card) => (
           <KpiCard
             key={card.label}

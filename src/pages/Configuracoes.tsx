@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Maximize2 } from 'lucide-react';
 import { PageHeader } from '../components/PageHeader';
 import { KpiCard } from '../components/KpiCard';
+import { CollapsibleKpiSection } from '../components/CollapsibleKpiSection';
 import { Badge } from '../components/Badge';
 import { DataSourceNotice } from '../components/DataSourceNotice';
 import { InlineRowActions } from '../components/InlineRowActions';
@@ -111,23 +112,29 @@ export function Configuracoes({ onSelectDetail, onOpenDetail }: PageProps) {
 
   return (
     <>
-      <PageHeader title="Parametrização" subtitle="Configure clientes, usuários, permissões, fontes, integrações e preferências do ambiente." action={<button className="secondary-btn">Nova parametrização</button>} />
-
-      <div className="tabs">
-        <button className="active">Clientes</button>
-        <button>Integrações</button>
-        <button>Usuários</button>
-        <button>Aparência</button><button>Personas</button>
-      </div>
+      <PageHeader title="Administração" action={<button className="secondary-btn">Nova parametrização</button>} />
 
       <DataSourceNotice source={source} loading={loading} error={error} connectionState={source === 'supabase' ? 'connected' : loading ? 'connecting' : error ? 'error' : (clientesResult.connectionState === 'slow' || integracoesResult.connectionState === 'slow' || usuariosResult.connectionState === 'slow') ? 'slow' : 'demo'} />
 
+      <CollapsibleKpiSection>
       <div className="kpi-grid four">
         <KpiCard label="Clientes ativos" value={String(clientesAtivos || clientes.length)} trend="base atual" tone="green" />
         <KpiCard label="Integrações configuradas" value={String(integracoesAtivas)} trend="conectores internos" tone="blue" />
         <KpiCard label="Usuários cadastrados" value={String(usuariosAtivos || usuarios.length)} trend="acesso operacional" tone="purple" />
         <KpiCard label="Ambientes monitorados" value={String(ambientes || 1)} trend="produção/homologação" tone="orange" />
       </div>
+      </CollapsibleKpiSection>
+
+<div className="tabs">
+  <button className="active">Administração</button>
+  <button>Cadastros</button>
+  <button>Integrações</button>
+  <button>Agentes</button>
+  <button>Campos de contexto</button>
+  <button>Modelos de tela</button>
+  <button>Preferências</button>
+</div>
+
 
       <SmartFilters search={search} onSearch={setSearch} status={status} onStatus={setStatus} placeholder="Buscar cliente, integração, usuário ou parâmetro..." />
 
