@@ -58,7 +58,7 @@ export function CentralAtendimento({ onSelectDetail, onOpenDetail }: PageProps) 
 
   return (
     <>
-      <PageHeader title="Central de Atendimento" subtitle="Demandas de clientes, tickets e sinais operacionais que alimentam impactos e roadmap" action={<button className="secondary-btn">Novo atendimento</button>} />
+      <PageHeader title="Central de Atendimento" subtitle="Veja solicitações, dúvidas e ocorrências que podem gerar análise, tarefa ou melhoria." action={<button className="secondary-btn">Novo atendimento</button>} />
       <div className="tabs"><button className="active">Atendimentos</button><button>Tickets</button><button>Integrações</button></div>
       <DataSourceNotice source={result.source} loading={result.loading} error={result.error} connectionState={result.connectionState} />
 

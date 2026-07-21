@@ -34,7 +34,7 @@ export function ImpactosProduto({ onSelectDetail, onOpenDetail }: PageProps) {
 
   return (
     <>
-      <PageHeader title="Mapa de Impactos" subtitle="Alcance dos impactos por produto, cliente, serviço, persona e risco operacional" action={<button className="secondary-btn">Exportar</button>} />
+      <PageHeader title="Mapa de Impactos" subtitle="Avalie onde uma mudança pode afetar produto, cliente, operação ou regra de negócio." action={<button className="secondary-btn">Exportar</button>} />
       <DataSourceNotice source={source} loading={loading} error={error} connectionState={connectionState} />
 
       <div className="kpi-grid four">

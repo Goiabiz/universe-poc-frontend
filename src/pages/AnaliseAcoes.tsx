@@ -45,7 +45,7 @@ export function AnaliseAcoes({ onSelectDetail, onOpenDetail }: PageProps) {
 
   return (
     <>
-      <PageHeader title="Roadmap" subtitle="Decisões, priorizações e ações que transformam impacto em entrega" />
+      <PageHeader title="Roadmap" subtitle="Acompanhe tarefas, decisões e entregas geradas a partir das análises." />
       <div className="tabs"><button className="active">Decisões</button><button>Priorização</button><button>Histórico</button></div>
       <DataSourceNotice source={source} loading={loading} error={error} connectionState={connectionState} />
 

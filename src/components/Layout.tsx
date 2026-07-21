@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Bell, BookOpen, Boxes, ChartNoAxesCombined, ChevronLeft, CircleHelp, ClipboardList, Cog, Headphones, Home, Menu, Search, ShieldAlert, UserRound } from 'lucide-react';
 import type { PageKey } from '../App';
 import { loadWorkspacePreferences } from '../lib/preferences';
@@ -15,11 +15,42 @@ const navItems: Array<{ key: PageKey; label: string; icon: React.ReactNode }> = 
 
 export function Layout({ activePage, onNavigate, children, rightPanel }: { activePage: PageKey; onNavigate: (page: PageKey) => void; children: React.ReactNode; rightPanel?: React.ReactNode }) {
   const [prefs, setPrefs] = useState(() => loadWorkspacePreferences());
+  const [panelSize, setPanelSize] = useState(() => window.localStorage.getItem('radar-sus-right-panel-size') || 'medium');
+  const [panelWidth, setPanelWidth] = useState(() => Number(window.localStorage.getItem('radar-sus-right-panel-width') || 0));
+  const isResizing = useRef(false);
 
   useEffect(() => {
     const refresh = () => setPrefs(loadWorkspacePreferences());
+    const refreshPanel = () => {
+      setPanelSize(window.localStorage.getItem('radar-sus-right-panel-size') || 'medium');
+      setPanelWidth(Number(window.localStorage.getItem('radar-sus-right-panel-width') || 0));
+    };
+
+    const handleMouseMove = (event: MouseEvent) => {
+      if (!isResizing.current) return;
+      const width = Math.min(680, Math.max(340, window.innerWidth - event.clientX));
+      setPanelWidth(width);
+      window.localStorage.setItem('radar-sus-right-panel-width', String(width));
+      window.localStorage.setItem('radar-sus-right-panel-size', 'custom');
+      window.dispatchEvent(new CustomEvent('radar-sus-panel-size-changed'));
+    };
+
+    const handleMouseUp = () => {
+      isResizing.current = false;
+      document.body.classList.remove('is-resizing-right-panel');
+    };
+
     window.addEventListener('storage', refresh);
-    return () => window.removeEventListener('storage', refresh);
+    window.addEventListener('radar-sus-panel-size-changed', refreshPanel);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      window.removeEventListener('storage', refresh);
+      window.removeEventListener('radar-sus-panel-size-changed', refreshPanel);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
   }, []);
   return (
     <div className="app-shell">
@@ -48,9 +79,21 @@ export function Layout({ activePage, onNavigate, children, rightPanel }: { activ
             <div className="user-area"><div className="avatar">{prefs.userPhotoUrl ? <img src={prefs.userPhotoUrl} alt={prefs.userName} /> : <UserRound size={18} />}</div><div><strong>{prefs.userName}</strong><small>{prefs.userEmail || 'Administrador'}</small></div></div>
           </div>
         </header>
-        <div className="content-grid">
+        <div className={`content-grid ${rightPanel ? `panel-${panelSize}` : 'panel-hidden'}`} style={rightPanel && panelWidth ? ({ '--right-panel-width': `${panelWidth}px` } as React.CSSProperties) : undefined}>
           <section className="page-content">{children}</section>
-          <aside className="right-panel">{rightPanel}</aside>
+          {rightPanel && (
+            <aside className="right-panel">
+              <button
+                className="right-panel-resizer"
+                title="Arraste para ajustar a largura do painel"
+                onMouseDown={() => {
+                  isResizing.current = true;
+                  document.body.classList.add('is-resizing-right-panel');
+                }}
+              />
+              {rightPanel}
+            </aside>
+          )}
         </div>
       </main>
     </div>

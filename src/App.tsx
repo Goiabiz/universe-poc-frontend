@@ -32,7 +32,12 @@ export function App() {
   const [activePage, setActivePage] = useState<PageKey>('dashboard');
   const [selectedDetail, setSelectedDetail] = useState<PanelDetail | null>(null);
   const [expandedDetail, setExpandedDetail] = useState<PanelDetail | null>(null);
-  const [isRightPanelVisible, setIsRightPanelVisible] = useState(() => loadWorkspacePreferences().rightPanelDefault === 'open');
+  const [isRightPanelVisible, setIsRightPanelVisible] = useState(false);
+
+  const handleSelectDetail = (detail: PanelDetail) => {
+    setSelectedDetail(detail);
+    setIsRightPanelVisible(true);
+  };
 
   useEffect(() => {
     applyWorkspacePreferences(loadWorkspacePreferences());
@@ -42,23 +47,24 @@ export function App() {
     setActivePage(page);
     setSelectedDetail(null);
     setExpandedDetail(null);
+    setIsRightPanelVisible(false);
   };
 
   const pages: Record<PageKey, React.ReactNode> = {
-    dashboard: <Dashboard onSelectDetail={setSelectedDetail} onOpenDetail={setExpandedDetail} />,
-    alertas: <Alertas onSelectDetail={setSelectedDetail} onOpenDetail={setExpandedDetail} />,
-    analise: <AnaliseAcoes onSelectDetail={setSelectedDetail} onOpenDetail={setExpandedDetail} />,
-    base: <BaseConhecimento onSelectDetail={setSelectedDetail} onOpenDetail={setExpandedDetail} />,
-    atendimento: <CentralAtendimento onSelectDetail={setSelectedDetail} onOpenDetail={setExpandedDetail} />,
-    impactos: <ImpactosProduto onSelectDetail={setSelectedDetail} onOpenDetail={setExpandedDetail} />,
-    config: <Configuracoes onSelectDetail={setSelectedDetail} onOpenDetail={setExpandedDetail} />
+    dashboard: <Dashboard onOpenDetail={setExpandedDetail} />,
+    alertas: <Alertas onSelectDetail={handleSelectDetail} onOpenDetail={setExpandedDetail} />,
+    analise: <AnaliseAcoes onSelectDetail={handleSelectDetail} onOpenDetail={setExpandedDetail} />,
+    base: <BaseConhecimento onSelectDetail={handleSelectDetail} onOpenDetail={setExpandedDetail} />,
+    atendimento: <CentralAtendimento onSelectDetail={handleSelectDetail} onOpenDetail={setExpandedDetail} />,
+    impactos: <ImpactosProduto onSelectDetail={handleSelectDetail} onOpenDetail={setExpandedDetail} />,
+    config: <Configuracoes onSelectDetail={handleSelectDetail} onOpenDetail={setExpandedDetail} />
   };
 
   return (
     <Layout
       activePage={activePage}
       onNavigate={handleNavigate}
-      rightPanel={<RightPanel variant={rightPanelByPage[activePage]} detail={selectedDetail} onExpand={setExpandedDetail} />}
+      rightPanel={isRightPanelVisible ? <RightPanel variant={rightPanelByPage[activePage]} detail={selectedDetail} onExpand={setExpandedDetail} onClose={() => setIsRightPanelVisible(false)} /> : undefined}
     >
       {pages[activePage]}
       <DetailModal detail={expandedDetail} onClose={() => setExpandedDetail(null)} />

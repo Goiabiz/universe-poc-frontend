@@ -547,3 +547,321 @@ universoSupabase
 ```
 
 A correção altera `operationalSupabase.ts` para usar `pocSupabase` e mantém a escrita real desativada por flag.
+
+
+## Versão v15 — Painel direito operacional + Base de Conhecimento semântica
+
+Pacote focado em layout, semântica e comportamento local, sem alteração estrutural de banco.
+
+### Base de Conhecimento
+- `Novo documento` → `Adicionar Conhecimento`;
+- abas: Conhecimentos, Fontes e Análises;
+- indicadores:
+  - Conhecimentos ativos;
+  - Fontes monitoradas;
+  - Grupos;
+  - Análises pendentes;
+- indicadores com tooltip e clique para atalho/filtro;
+- remoção dos textos pequenos de tendência nos indicadores da Base de Conhecimento;
+- busca: `Buscar conhecimento por descrição, fonte, grupo ou assunto...`;
+- tabela ajustada para linguagem de negócio:
+  - Descrição;
+  - Origem;
+  - Fonte;
+  - Incluído em;
+  - Data da fonte;
+  - Grupo;
+  - Status;
+  - Classificação;
+  - Responsável;
+  - Ações;
+- status do conhecimento simplificado:
+  - Novo;
+  - Em análise;
+  - Ativo;
+  - Cancelado;
+- classificação substitui prioridade/relevância na Base de Conhecimento;
+- edição fica junto da descrição;
+- ações agrupadas por linha:
+  - Expandir em modal;
+  - Acessar em nova guia;
+  - Mais opções.
+
+### Painel direito
+- remove título genérico `Documento selecionado` para conhecimento;
+- painel passa a iniciar pelo item selecionado;
+- botão de abrir em nova guia;
+- botão de expandir em modal;
+- botão de mais opções;
+- botão de recolher painel;
+- botão de largura dinâmica: compacto, médio e expandido;
+- blocos recolhíveis:
+  - Resumo;
+  - Informações;
+  - Relações do conhecimento;
+  - Ações rápidas;
+  - Histórico;
+  - Governança;
+- relações do conhecimento com contadores:
+  - Alertas gerados;
+  - Impactos associados;
+  - Tarefas relacionadas;
+  - Orientações registradas;
+  - Versões do conhecimento;
+  - Atendimentos vinculados.
+
+### Roadmap funcional registrado
+- largura do painel salva por usuário;
+- arrastar largura do painel como evolução futura;
+- campos personalizáveis controlados;
+- visões personalizadas por usuário;
+- colunas configuráveis por módulo;
+- blocos configuráveis no painel direito;
+- controle de quais campos podem ser editados inline.
+
+
+## Correção v15.1 — Ajustes finos de usabilidade da Base de Conhecimento
+
+Ajustes após validação visual:
+
+- o painel direito não abre automaticamente ao entrar no módulo;
+- painel direito abre somente após selecionar um item;
+- abas Fontes e Análises permanecem visíveis, mas sem ação por enquanto;
+- cards da Base de Conhecimento voltam ao padrão visual dos demais módulos;
+- tooltips passam a usar texto neutro, sem depender do nome do agente SUSi;
+- ícones de origem ganham cores e significado visual por tipo;
+- lápis de edição fica em coluna discreta e aparece apenas ao passar o mouse na linha;
+- Governança foi renomeado para Mais ações;
+- painel direito recebe barra lateral para arrastar e ajustar a largura;
+- o botão de tamanho do painel permanece alternando compacto, médio e expandido.
+
+Sem alteração estrutural de banco.
+
+
+## Correção v15.2 — Ícones do topo do painel direito
+
+Ajusta a barra superior do painel direito:
+
+- remove duplicidade visual do ícone de expandir;
+- `↔` passa a representar ajuste de largura do painel;
+- `⛶` permanece para expandir em modal;
+- `⋯` fica ao lado do botão de fechar;
+- ordem padronizada:
+  - abrir em nova guia;
+  - expandir;
+  - ajustar largura;
+  - mais opções;
+  - fechar/recolher.
+
+
+## Correção v15.3 — Origem, edição e compartilhamento
+
+Ajustes visuais e funcionais:
+
+- lápis de edição alinhado na linha e visível apenas no hover;
+- ícones de origem maiores, mais fortes e com cores por tipo;
+- exportações renomeadas por tipo de arquivo:
+  - PDF;
+  - XLS;
+  - DOC;
+  - XML;
+  - CSV;
+- `Copiar link` foi substituído por `Compartilhar`;
+- compartilhar abre popover com:
+  - destinatário;
+  - mensagem opcional;
+  - copiar link;
+  - enviar por e-mail;
+- enviar por e-mail exibe aviso para conectar uma conta em Parametrização > Integrações.
+
+
+## Correção v15.4 — Largura da tela, lápis e origem
+
+Corrige pontos visuais da v15.3:
+
+- quando o painel direito está fechado, a área central volta a ocupar a largura disponível;
+- remove a área branca reservada indevidamente ao painel direito;
+- lápis de edição fica alinhado ao título e aparece somente no hover da linha;
+- remove coluna discreta separada quando ela não melhora a leitura;
+- ícones de origem ficam maiores, mais contrastados e visíveis;
+- mantém compartilhamento, exportações e painel redimensionável.
+
+
+## Correção v15.5 — Menu único, origem e roadmap do agente
+
+Ajustes implementados:
+- menu de ações unificado para linha e painel direito;
+- exportações padronizadas como tipos de arquivo: PDF, XLS, DOC, XML e CSV;
+- `Copiar link` substituído por `Compartilhar`;
+- compartilhamento com destinatário, mensagem, copiar link e envio por e-mail;
+- menus fecham ao clicar fora;
+- ao abrir um menu, o outro é recolhido;
+- ícone de origem ajustado para leitura mais clara;
+- origem `Guia/Wiki/Site` passa a usar ícone de acesso/fonte externa.
+
+Roadmap funcional registrado:
+- Classificações personalizáveis por produto, cliente ou operação;
+- administrador poderá cadastrar e ordenar classificações;
+- o campo Classificação deverá aceitar valores parametrizados;
+- cada produto poderá definir classificações próprias;
+- agente contratado poderá atuar como guia de preenchimento;
+- o agente deverá fazer perguntas orientadas ao usuário;
+- o usuário responde e o agente sugere preenchimento dos campos;
+- os campos só serão aplicados após validação do usuário;
+- registrar histórico da orientação, sugestão e decisão validada.
+
+
+## Versão v16 — Área de Trabalho executiva
+
+Ajusta a Home para ser uma visão de resumo, não uma tela operacional.
+
+### Área de Trabalho
+- Remove uso de painel direito na Home;
+- clique em itens abre modal de resumo;
+- remove filtros da Home;
+- remove ações inline da Home;
+- padroniza cards com tooltip e sem texto pequeno abaixo do valor;
+- indicadores principais:
+  - Conhecimentos ativos;
+  - Alertas;
+  - Ações pendentes;
+  - Novas tarefas;
+  - Fontes monitoradas;
+- remove `Trechos indexados` da Home por ser informação técnica;
+- remove `Impactos identificados` como indicador fixo;
+- substitui o gráfico decorativo por:
+  - Tarefas por status;
+  - Movimento dos últimos 7 dias;
+- troca `Mapa de impactos recente` por `Tarefas recentes`;
+- `Últimos 5 alertas` vira lista de resumo sem ações.
+
+### Conceito registrado
+- Conhecimento é fonte/conteúdo capturado, cadastrado ou monitorado;
+- Alerta é sinal emitido a partir de conhecimento, regra, mudança, risco ou oportunidade;
+- Impacto é consequência analisada, não indicador fixo da Home;
+- Tarefa é ação operacional criada a partir de alerta, análise, orientação ou decisão.
+
+### Roadmap registrado
+- Canais monitorados como fonte de conhecimento;
+- fontes do tipo rede social ou canal de vídeo exigem plataforma, perfil/canal/página e URL/identificador externo;
+- rede social e canal de vídeo não mudam a estrutura principal: continuam sendo Fonte → Conhecimento → Análise → Ativo/Cancelado → Alerta/Impacto/Tarefa;
+- ajustar ícones de origem para não usar `Alerta` como origem;
+- redes sociais devem usar ícones próprios ou equivalentes claros por plataforma.
+
+
+## Correção v16.1 — Home executiva refinada
+
+Ajustes na Área de Trabalho:
+- troca o gráfico de barras de tarefas por uma rosca de tarefas por status;
+- renomeia `Movimento dos últimos 7 dias` para `Atualizações da Base de Conhecimento`;
+- troca o gráfico de movimento por rosca de origem da base;
+- remove a ideia de evolução temporal da Home por enquanto;
+- mantém a Home como resumo executivo, não tela de trabalho;
+- separa `Tarefas recentes` e `Alertas recentes` em dois blocos sequenciais de largura total;
+- remove textos do tipo `últimos 5` dos títulos;
+- mantém clique em item abrindo modal, sem painel direito.
+
+Roadmap registrado:
+- agente contratado deve permitir interação por voz;
+- agente deve ouvir o usuário, transcrever a solicitação e pedir validação antes de preencher ou executar;
+- agente deve responder por voz quando habilitado;
+- voz deve respeitar permissão do usuário, contexto do cliente, perfil de acesso e auditoria;
+- todos os comandos por voz devem gerar histórico de solicitação, sugestão e confirmação.
+
+
+## Correção v16.2 — Tooltips da Área de Trabalho e textos orientados
+
+Ajustes:
+- adiciona tooltips visíveis nos cards da Área de Trabalho;
+- mantém os tooltips da Base de Conhecimento como já estavam;
+- troca subtítulos das telas para orientar o usuário sobre o que acompanhar ou fazer;
+- remove menção genérica ao agente/persona nos textos gerais;
+- padrão de escrita: subtítulo deve orientar uso prático, não explicar tecnicamente o módulo.
+
+
+## Correção v16.3 — Tooltip interno no KPI Card
+
+Ajuste técnico:
+- `KpiCard` passa a aceitar a propriedade `tooltip`;
+- o ícone de informação é renderizado dentro do próprio card;
+- a Área de Trabalho passa os textos de tooltip diretamente para o card;
+- evita perda visual por wrapper externo ou sobreposição de CSS.
+
+
+## Versão v17 — Central de Alertas conceitual
+
+Central de Alertas ajustada para refletir o conceito de produto:
+
+- alerta é um aviso/sinal que precisa ser monitorado, divulgado e tratado;
+- conhecimento pode gerar alerta e tarefa;
+- alerta pode gerar tarefa;
+- tarefa pode gerar novo conhecimento e novo alerta;
+- o valor do alerta está na difusão da informação e nas ações posteriores.
+
+### Regras da Central de Alertas
+- status simples: `Novo`, `Em andamento`, `Concluído`;
+- `Críticos em aberto` conta somente alertas críticos não concluídos, não cancelados e não excluídos;
+- alerta concluído deixa de contar como crítico aberto;
+- cancelamento e exclusão são ações, não status principal da operação;
+- manter controle de quem recebeu o alerta e quais atividades posteriores foram geradas;
+- ao encaminhar alerta para tarefa, a tarefa deve nascer vinculada ao alerta;
+- se a tarefa já existir, permitir vincular tarefa existente;
+- vínculo com conhecimento não deve ser ação principal, pois o alerta já nasce de uma origem/contexto quando aplicável.
+
+### Divulgação do alerta
+O alerta deve suportar divulgação por:
+- usuários do sistema;
+- equipes;
+- e-mail;
+- WhatsApp;
+- contatos externos;
+- clientes ou grupos configurados.
+
+### Ações do alerta
+Ações adequadas:
+- Cadastrar alerta;
+- Divulgar alerta;
+- Encaminhar para tarefa;
+- Vincular tarefa existente;
+- Gerar orientação;
+- Acionar agente;
+- Compartilhar;
+- Concluir alerta;
+- Cancelar;
+- Excluir.
+
+Ações removidas do contexto de alerta:
+- Ativar conhecimento;
+- Arquivar conhecimento;
+- Exportar alerta individual;
+- Imprimir alerta individual.
+
+### Campos e personalização
+- tabela principal usa campos universais: descrição, status, criticidade, responsável, emitido em, divulgação, tarefas e ações;
+- módulo, funcionalidade, montadora, fornecedor, produto, serviço ou outros dados devem ser tratados como campos de contexto personalizáveis;
+- fonte do conhecimento fica em detalhe/desdobramento, não como coluna principal do alerta.
+
+
+## Correção v17.1 — Menu único e alerta simplificado
+
+Ajustes:
+- cria `AlertActionsMenu` como componente único para ações de alerta;
+- linha da tabela e painel direito usam o mesmo componente de ações;
+- menu fecha ao clicar fora;
+- remove coluna `Divulgação` da tabela principal;
+- divulgação permanece no detalhe do alerta;
+- coluna `Tarefas` passa a exibir somente número;
+- troca o rótulo visual `Criticidade` por `Prioridade`;
+- painel direito de alerta passa a editar Status, Prioridade e Responsável;
+- `Desdobramentos do alerta` passa a priorizar divulgações realizadas, tarefas geradas e orientações registradas.
+
+
+## Correção v17.2 — Alinhamento da tabela de alertas
+
+Ajustes:
+- remove conteúdo de divulgação do corpo da tabela principal;
+- divulgação permanece apenas no detalhe do alerta;
+- coluna `Tarefas` passa a exibir somente valor numérico;
+- coluna `Ações` passa a exibir somente ícones e menu;
+- remove lápis duplicado nas ações da linha;
+- mantém lápis de edição somente no hover da descrição do alerta.

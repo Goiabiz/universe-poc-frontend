@@ -111,7 +111,7 @@ export function Configuracoes({ onSelectDetail, onOpenDetail }: PageProps) {
 
   return (
     <>
-      <PageHeader title="Parametrização" subtitle="Parâmetros do ambiente, clientes, integrações, usuários, personas e preferências operacionais" action={<button className="secondary-btn">Nova parametrização</button>} />
+      <PageHeader title="Parametrização" subtitle="Configure clientes, usuários, permissões, fontes, integrações e preferências do ambiente." action={<button className="secondary-btn">Nova parametrização</button>} />
 
       <div className="tabs">
         <button className="active">Clientes</button>

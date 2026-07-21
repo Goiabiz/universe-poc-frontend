@@ -31,7 +31,7 @@ export const isSupabaseWriteEnabled = () => ENABLE_SUPABASE_WRITES;
 export async function persistRoadmapItem(item: GeneratedRoadmapItem) {
   if (!ENABLE_SUPABASE_WRITES) return { data: item, source: 'local', skipped: true };
 
-  const { data, error } = await supabasePoc
+  const { data, error } = await getClient()
     .from('roadmap_itens_operacionais')
     .insert({
       origem: item.origem,
@@ -52,7 +52,7 @@ export async function persistRoadmapItem(item: GeneratedRoadmapItem) {
 export async function persistOperationalPatch(patch: OperationalPatch) {
   if (!ENABLE_SUPABASE_WRITES) return { data: patch, source: 'local', skipped: true };
 
-  const { data, error } = await supabasePoc
+  const { data, error } = await getClient()
     .from('workspace_alteracoes_operacionais')
     .insert({
       titulo: patch.title,
@@ -74,7 +74,7 @@ export async function persistOperationalPatch(patch: OperationalPatch) {
 export async function persistOperationalHistory(history: OperationalHistory) {
   if (!ENABLE_SUPABASE_WRITES) return { data: history, source: 'local', skipped: true };
 
-  const { data, error } = await supabasePoc
+  const { data, error } = await getClient()
     .from('historico_operacional')
     .insert({
       titulo: history.title,
@@ -93,7 +93,7 @@ export async function persistOperationalHistory(history: OperationalHistory) {
 export async function persistAuditLog(payload: AuditPayload) {
   if (!ENABLE_SUPABASE_WRITES) return { data: payload, source: 'local', skipped: true };
 
-  const { data, error } = await supabasePoc
+  const { data, error } = await getClient()
     .from('auditoria_usuario')
     .insert({
       usuario_nome: payload.usuarioNome,
